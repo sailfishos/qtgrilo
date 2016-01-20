@@ -30,11 +30,11 @@
 class GRILO_QT_EXPORT GriloSearch : public GriloDataSource {
   Q_OBJECT
 
-  Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged);
-  Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged);
-  Q_PROPERTY(QVariantList supportedKeys READ supportedKeys NOTIFY supportedKeysChanged);
-  Q_PROPERTY(QVariantList slowKeys READ slowKeys NOTIFY slowKeysChanged);
-  Q_PROPERTY(bool available READ isAvailable NOTIFY availabilityChanged);
+  Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
+  Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
+  Q_PROPERTY(QVariantList supportedKeys READ supportedKeys NOTIFY supportedKeysChanged)
+  Q_PROPERTY(QVariantList slowKeys READ slowKeys NOTIFY slowKeysChanged)
+  Q_PROPERTY(bool available READ isAvailable NOTIFY availabilityChanged)
 
 public:
   GriloSearch(QObject *parent = 0);

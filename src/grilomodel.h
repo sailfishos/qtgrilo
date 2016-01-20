@@ -36,8 +36,8 @@ class GriloDataSource;
 class GRILO_QT_EXPORT GriloModel : public QAbstractListModel {
   Q_OBJECT
 
-  Q_PROPERTY(GriloDataSource* source READ source WRITE setSource NOTIFY sourceChanged);
-  Q_PROPERTY(int count READ count NOTIFY countChanged);
+  Q_PROPERTY(GriloDataSource* source READ source WRITE setSource NOTIFY sourceChanged)
+  Q_PROPERTY(int count READ count NOTIFY countChanged)
 
   friend class GriloDataSource;
 

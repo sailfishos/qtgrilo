@@ -35,24 +35,24 @@
 class GRILO_QT_EXPORT GriloMedia : public QObject {
   Q_OBJECT
 
-  Q_PROPERTY(QString id READ id CONSTANT);
-  Q_PROPERTY(QString title READ title CONSTANT);
-  Q_PROPERTY(QUrl url READ url CONSTANT);
-  Q_PROPERTY(bool container READ isContainer CONSTANT);
-  Q_PROPERTY(int duration READ duration CONSTANT);
-  Q_PROPERTY(QString author READ author CONSTANT);
-  Q_PROPERTY(QString album READ album CONSTANT);
-  Q_PROPERTY(QString artist READ artist CONSTANT);
-  Q_PROPERTY(QString genre READ genre CONSTANT);
-  Q_PROPERTY(QUrl thumbnail READ thumbnail CONSTANT);
-  Q_PROPERTY(int year READ year CONSTANT);
-  Q_PROPERTY(int trackNumber READ trackNumber CONSTANT);
-  Q_PROPERTY(int childCount READ childCount CONSTANT);
-  Q_PROPERTY(QString mimeType READ mimeType CONSTANT);
-  Q_PROPERTY(QDateTime modificationDate READ modificationDate CONSTANT);
-  Q_PROPERTY(int height READ height CONSTANT);
-  Q_PROPERTY(int orientation READ orientation CONSTANT);
-  Q_PROPERTY(int width READ width CONSTANT);
+  Q_PROPERTY(QString id READ id CONSTANT)
+  Q_PROPERTY(QString title READ title CONSTANT)
+  Q_PROPERTY(QUrl url READ url CONSTANT)
+  Q_PROPERTY(bool container READ isContainer CONSTANT)
+  Q_PROPERTY(int duration READ duration CONSTANT)
+  Q_PROPERTY(QString author READ author CONSTANT)
+  Q_PROPERTY(QString album READ album CONSTANT)
+  Q_PROPERTY(QString artist READ artist CONSTANT)
+  Q_PROPERTY(QString genre READ genre CONSTANT)
+  Q_PROPERTY(QUrl thumbnail READ thumbnail CONSTANT)
+  Q_PROPERTY(int year READ year CONSTANT)
+  Q_PROPERTY(int trackNumber READ trackNumber CONSTANT)
+  Q_PROPERTY(int childCount READ childCount CONSTANT)
+  Q_PROPERTY(QString mimeType READ mimeType CONSTANT)
+  Q_PROPERTY(QDateTime modificationDate READ modificationDate CONSTANT)
+  Q_PROPERTY(int height READ height CONSTANT)
+  Q_PROPERTY(int orientation READ orientation CONSTANT)
+  Q_PROPERTY(int width READ width CONSTANT)
 public:
   GriloMedia(GrlMedia *media, QObject *parent = 0);
   ~GriloMedia();

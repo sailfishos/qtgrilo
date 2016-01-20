@@ -36,8 +36,8 @@
 class GRILO_QT_EXPORT GriloRegistry : public QObject {
   Q_OBJECT
 
-  Q_PROPERTY(QStringList availableSources READ availableSources NOTIFY availableSourcesChanged);
-  Q_PROPERTY(QString configurationFile READ configurationFile WRITE setConfigurationFile NOTIFY configurationFileChanged);
+  Q_PROPERTY(QStringList availableSources READ availableSources NOTIFY availableSourcesChanged)
+  Q_PROPERTY(QString configurationFile READ configurationFile WRITE setConfigurationFile NOTIFY configurationFileChanged)
 
 public:
   GriloRegistry(QObject *parent = 0);

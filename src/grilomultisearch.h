@@ -32,8 +32,8 @@
 class GRILO_QT_EXPORT GriloMultiSearch : public GriloDataSource {
   Q_OBJECT
 
-  Q_PROPERTY(QStringList sources READ sources WRITE setSources NOTIFY sourcesChanged);
-  Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged);
+  Q_PROPERTY(QStringList sources READ sources WRITE setSources NOTIFY sourcesChanged)
+  Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
 
 public:
   GriloMultiSearch(QObject *parent = 0);

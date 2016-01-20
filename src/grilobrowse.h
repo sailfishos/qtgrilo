@@ -32,11 +32,11 @@ class GriloMedia;
 class GRILO_QT_EXPORT GriloBrowse : public GriloDataSource {
   Q_OBJECT
 
-  Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged);
-  Q_PROPERTY(QVariantList supportedKeys READ supportedKeys NOTIFY supportedKeysChanged);
-  Q_PROPERTY(QVariantList slowKeys READ slowKeys NOTIFY slowKeysChanged);
-  Q_PROPERTY(bool available READ isAvailable NOTIFY availabilityChanged);
-  Q_PROPERTY(QString baseMedia READ baseMedia WRITE setBaseMedia NOTIFY baseMediaChanged);
+  Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
+  Q_PROPERTY(QVariantList supportedKeys READ supportedKeys NOTIFY supportedKeysChanged)
+  Q_PROPERTY(QVariantList slowKeys READ slowKeys NOTIFY slowKeysChanged)
+  Q_PROPERTY(bool available READ isAvailable NOTIFY availabilityChanged)
+  Q_PROPERTY(QString baseMedia READ baseMedia WRITE setBaseMedia NOTIFY baseMediaChanged)
 
 public:
   GriloBrowse(QObject *parent = 0);

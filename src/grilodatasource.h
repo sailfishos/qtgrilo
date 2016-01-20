@@ -38,14 +38,14 @@ class GriloRegistry;
 class GRILO_QT_EXPORT GriloDataSource : public QObject {
   Q_OBJECT
 
-  Q_PROPERTY(GriloRegistry* registry READ registry WRITE setRegistry NOTIFY registryChanged);
-  Q_PROPERTY(int count READ count WRITE setCount NOTIFY countChanged);
-  Q_PROPERTY(int skip READ skip WRITE setSkip NOTIFY skipChanged);
-  Q_PROPERTY(QVariantList metadataKeys READ metadataKeys WRITE setMetadataKeys NOTIFY metadataKeysChanged);
-  Q_PROPERTY(QVariantList typeFilter READ typeFilter WRITE setTypeFilter NOTIFY typeFilterChanged);
+  Q_PROPERTY(GriloRegistry* registry READ registry WRITE setRegistry NOTIFY registryChanged)
+  Q_PROPERTY(int count READ count WRITE setCount NOTIFY countChanged)
+  Q_PROPERTY(int skip READ skip WRITE setSkip NOTIFY skipChanged)
+  Q_PROPERTY(QVariantList metadataKeys READ metadataKeys WRITE setMetadataKeys NOTIFY metadataKeysChanged)
+  Q_PROPERTY(QVariantList typeFilter READ typeFilter WRITE setTypeFilter NOTIFY typeFilterChanged)
 
-  Q_ENUMS(MetadataKeys);
-  Q_ENUMS(TypeFilter);
+  Q_ENUMS(MetadataKeys)
+  Q_ENUMS(TypeFilter)
   // TODO: metadata resolution flags ?
 
 public:
