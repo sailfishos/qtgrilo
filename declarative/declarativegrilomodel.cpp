@@ -25,20 +25,13 @@
 
 #include <GriloMedia>
 
-#if QT_VERSION_5
-# include <QQmlEngine>
-# define QDeclarativeEngine QQmlEngine
-#else
-# include <QDeclarativeEngine>
-#endif
+#include <QQmlEngine>
 
 DeclarativeGriloModel::DeclarativeGriloModel(QObject *parent) :
   GriloModel(parent) {
-
 }
 
 DeclarativeGriloModel::~DeclarativeGriloModel() {
-
 }
 
 QObject *DeclarativeGriloModel::get(int rowIndex) const {
@@ -46,7 +39,7 @@ QObject *DeclarativeGriloModel::get(int rowIndex) const {
 
   GriloMedia *media = mediaVariant.value<GriloMedia*>();
   if (media) {
-    QDeclarativeEngine::setObjectOwnership(media, QDeclarativeEngine::CppOwnership);
+    QQmlEngine::setObjectOwnership(media, QQmlEngine::CppOwnership);
   }
 
   return media;

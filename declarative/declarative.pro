@@ -1,21 +1,18 @@
-include(../common.pri)
-
 TEMPLATE = lib
 CONFIG += qt plugin link_pkgconfig
 DEPENDPATH += ../src
 INCLUDEPATH += ../src
 
-equals(QT_MAJOR_VERSION, 4): QT += declarative
-equals(QT_MAJOR_VERSION, 5): QT = core qml
+QT = core qml
 
-LIBS += -L../src -l$${GRILOQTLIB}
+LIBS += -L../src -lgrilo-qt5
 PKGCONFIG = grilo-0.2
 
 EXAMPLE = ../example/declarative/*
 
 OTHER_FILES += $${EXAMPLE}
 
-TARGET = $${GRILOQTLIB}-qml-plugin
+TARGET = grilo-qt5-qml-plugin
 PLUGIN_IMPORT_PATH = org/nemomobile/grilo
 
 QMAKE_SUBSTITUTES = qmldir.in
@@ -28,8 +25,7 @@ HEADERS += \
     griloplugin.h \
     declarativegrilomodel.h
 
-equals(QT_MAJOR_VERSION, 4): target.path = $$[QT_INSTALL_IMPORTS]/$$PLUGIN_IMPORT_PATH
-equals(QT_MAJOR_VERSION, 5): target.path = $$[QT_INSTALL_QML]/$$PLUGIN_IMPORT_PATH
+target.path = $$[QT_INSTALL_QML]/$$PLUGIN_IMPORT_PATH
 
 qml.files = qmldir
 qml.path = $$target.path

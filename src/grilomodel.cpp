@@ -56,13 +56,11 @@ QVariant GriloModel::data(const QModelIndex& index, int role) const {
   switch (role) {
   case MediaRole:
     return QVariant::fromValue(m_source->media()->at(index.row()));
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
   default: {
     QList<QByteArray> keys = roleNames().values(role);
     if (keys.length() > 0) {
       return m_source->media()->at(index.row())->get(role - MediaRole);
     }}
-#endif
   }
 
   return QVariant();
@@ -102,7 +100,6 @@ int GriloModel::count() const {
   return rowCount();
 }
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 QHash<int, QByteArray> GriloModel::roleNames() const {
   if (m_roleNames.isEmpty())
     grl_init(0, 0);
@@ -128,4 +125,3 @@ QHash<int, QByteArray> GriloModel::roleNames() const {
 
   return m_roleNames;
 }
-#endif

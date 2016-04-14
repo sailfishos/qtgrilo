@@ -1,14 +1,12 @@
-include(../../common.pri)
-
 TEMPLATE = app
 TARGET = simple
 CONFIG += qt link_pkgconfig
 
-equals(QT_MAJOR_VERSION, 5): QT += widgets
+QT += widgets
 
 DEPENDPATH += ../../src
 INCLUDEPATH += ../../src
-LIBS += -L../../src -l$${GRILOQTLIB}
+LIBS += -L../../src -lgrilo-qt5
 PKGCONFIG = grilo-0.2
 
 SOURCES += \

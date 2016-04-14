@@ -1,12 +1,10 @@
-include(../common.pri)
-
 TEMPLATE = lib
 CONFIG += qt link_pkgconfig
 
-equals(QT_MAJOR_VERSION, 5): QT = core
+QT = core
 
 PKGCONFIG = grilo-0.2
-TARGET = $${GRILOQTLIB}
+TARGET = grilo-qt5
 
 unix:system(cp pre-grilo-qt.prf.in $${TARGET}.prf.in)
 QMAKE_SUBSTITUTES = $${TARGET}.prf.in
@@ -70,5 +68,4 @@ QMAKE_PKGCONFIG_LIBDIR = $$target.path
 QMAKE_PKGCONFIG_INCDIR = $$headers.path
 QMAKE_PKGCONFIG_DESTDIR = pkgconfig
 
-equals(QT_MAJOR_VERSION, 4): QMAKE_PKGCONFIG_REQUIRES += Qt4Core
-equals(QT_MAJOR_VERSION, 5): QMAKE_PKGCONFIG_REQUIRES += Qt5Core
+QMAKE_PKGCONFIG_REQUIRES += Qt5Core
