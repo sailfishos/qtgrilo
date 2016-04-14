@@ -27,49 +27,51 @@
 #include <GriloQt>
 #include <GriloDataSource>
 
-class GRILO_QT_EXPORT GriloQuery : public GriloDataSource {
-  Q_OBJECT
+class GRILO_QT_EXPORT GriloQuery : public GriloDataSource
+{
+    Q_OBJECT
 
-  Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
-  Q_PROPERTY(QString query READ query WRITE setQuery NOTIFY queryChanged)
-  Q_PROPERTY(QVariantList supportedKeys READ supportedKeys NOTIFY supportedKeysChanged)
-  Q_PROPERTY(QVariantList slowKeys READ slowKeys NOTIFY slowKeysChanged)
-  Q_PROPERTY(bool available READ isAvailable NOTIFY availabilityChanged)
+    Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
+    Q_PROPERTY(QString query READ query WRITE setQuery NOTIFY queryChanged)
+    Q_PROPERTY(QVariantList supportedKeys READ supportedKeys NOTIFY supportedKeysChanged)
+    Q_PROPERTY(QVariantList slowKeys READ slowKeys NOTIFY slowKeysChanged)
+    Q_PROPERTY(bool available READ isAvailable NOTIFY availabilityChanged)
 
 public:
-  GriloQuery(QObject *parent = 0);
-  ~GriloQuery();
+    GriloQuery(QObject *parent = 0);
+    ~GriloQuery();
 
-  bool refresh();
+    bool refresh();
 
-  QString source() const;
-  void setSource(const QString& source);
+    QString source() const;
+    void setSource(const QString &source);
 
-  QString query() const;
-  void setQuery(const QString& query);
+    QString query() const;
+    void setQuery(const QString &query);
 
-  QVariantList supportedKeys() const;
-  QVariantList slowKeys() const;
+    QVariantList supportedKeys() const;
+    QVariantList slowKeys() const;
 
-  bool isAvailable() const;
+    bool isAvailable() const;
 
 signals:
-  void sourceChanged();
-  void queryChanged();
-  void supportedKeysChanged();
-  void slowKeysChanged();
-  void availabilityChanged();
+    void sourceChanged();
+    void queryChanged();
+    void supportedKeysChanged();
+    void slowKeysChanged();
+    void availabilityChanged();
 
 private:
-  void contentChanged(const QString &source, GrlSourceChangeType change_type, GPtrArray *changed_media);
-  void availableSourcesChanged();
+    void contentChanged(const QString &source, GrlSourceChangeType change_type,
+                        GPtrArray *changed_media);
+    void availableSourcesChanged();
 
-  QString m_source;
-  QString m_query;
+    QString m_source;
+    QString m_query;
 
-  QVariantList m_slowKeys;
-  QVariantList m_supportedKeys;
-  bool m_available;
+    QVariantList m_slowKeys;
+    QVariantList m_supportedKeys;
+    bool m_available;
 };
 
 #endif /* GRILO_QUERY_H */

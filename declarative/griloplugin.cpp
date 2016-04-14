@@ -38,18 +38,21 @@ GriloPlugin::GriloPlugin(QObject *parent)
 {
 }
 
-GriloPlugin::~GriloPlugin() {
+GriloPlugin::~GriloPlugin()
+{
 
 }
 
-void GriloPlugin::registerTypes(const char *uri) {
-  qmlRegisterType<GriloRegistry>(uri, 0, 1, "GriloRegistry");
-  qmlRegisterType<DeclarativeGriloModel>(uri, 0, 1, "GriloModel");
-  qmlRegisterType<GriloBrowse>(uri, 0, 1, "GriloBrowse");
-  qmlRegisterType<GriloSearch>(uri, 0, 1, "GriloSearch");
-  qmlRegisterType<GriloQuery>(uri, 0, 1, "GriloQuery");
-  // TODO: Symbol error when used :(
-  //  qmlRegisterType<GriloMultiSearch>(uri, 0, 1, "GriloMultiSearch");
-  qmlRegisterType<GriloDataSource>();
-  qmlRegisterUncreatableType<GriloMedia>(uri, 0, 0, "GriloMedia", "GriloMedia can be obtained from GriloModel");
+void GriloPlugin::registerTypes(const char *uri)
+{
+    qmlRegisterType<GriloRegistry>(uri, 0, 1, "GriloRegistry");
+    qmlRegisterType<DeclarativeGriloModel>(uri, 0, 1, "GriloModel");
+    qmlRegisterType<GriloBrowse>(uri, 0, 1, "GriloBrowse");
+    qmlRegisterType<GriloSearch>(uri, 0, 1, "GriloSearch");
+    qmlRegisterType<GriloQuery>(uri, 0, 1, "GriloQuery");
+    // TODO: Symbol error when used :(
+    //  qmlRegisterType<GriloMultiSearch>(uri, 0, 1, "GriloMultiSearch");
+    qmlRegisterType<GriloDataSource>();
+    qmlRegisterUncreatableType<GriloMedia>(uri, 0, 0, "GriloMedia",
+                                           "GriloMedia can be obtained from GriloModel");
 }

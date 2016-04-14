@@ -40,10 +40,10 @@ public:
     SimpleModel(QObject *parent = 0);
     ~SimpleModel();
 
-    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
 public slots:
-    void onItemClicked(const QModelIndex& index);
+    void onItemClicked(const QModelIndex &index);
 
 private:
     GriloRegistry *m_grlRegistry;

@@ -33,46 +33,47 @@
 
 #include <QStringList>
 
-class GRILO_QT_EXPORT GriloRegistry : public QObject {
-  Q_OBJECT
+class GRILO_QT_EXPORT GriloRegistry : public QObject
+{
+    Q_OBJECT
 
-  Q_PROPERTY(QStringList availableSources READ availableSources NOTIFY availableSourcesChanged)
-  Q_PROPERTY(QString configurationFile READ configurationFile WRITE setConfigurationFile NOTIFY configurationFileChanged)
+    Q_PROPERTY(QStringList availableSources READ availableSources NOTIFY availableSourcesChanged)
+    Q_PROPERTY(QString configurationFile READ configurationFile WRITE setConfigurationFile NOTIFY configurationFileChanged)
 
 public:
-  GriloRegistry(QObject *parent = 0);
-  ~GriloRegistry();
+    GriloRegistry(QObject *parent = 0);
+    ~GriloRegistry();
 
-  QStringList availableSources();
+    QStringList availableSources();
 
-  Q_INVOKABLE bool loadAll();
+    Q_INVOKABLE bool loadAll();
 
-  Q_INVOKABLE bool loadPluginById(const QString& pluginId);
+    Q_INVOKABLE bool loadPluginById(const QString &pluginId);
 
-  GrlSource *lookupSource(const QString& id);
+    GrlSource *lookupSource(const QString &id);
 
-  QString configurationFile() const;
-  void setConfigurationFile(const QString& file);
+    QString configurationFile() const;
+    void setConfigurationFile(const QString &file);
 
 signals:
-  void availableSourcesChanged();
-  void configurationFileChanged();
-  void contentChanged(const QString &source, GrlSourceChangeType change_type,
-                      GPtrArray *changed_media);
+    void availableSourcesChanged();
+    void configurationFileChanged();
+    void contentChanged(const QString &source, GrlSourceChangeType change_type,
+                        GPtrArray *changed_media);
 
 private:
-  static void connect_source(gpointer data, gpointer user_data);
-  static void grilo_source_added(GrlRegistry *registry, GrlSource *src, gpointer user_data);
-  static void grilo_source_removed(GrlRegistry *registry, GrlSource *src, gpointer user_data);
-  static void grilo_content_changed_cb(GrlSource *source, GPtrArray *changed_media,
-                     GrlSourceChangeType change_type, gboolean location_unknown,
-                     gpointer data);
+    static void connect_source(gpointer data, gpointer user_data);
+    static void grilo_source_added(GrlRegistry *registry, GrlSource *src, gpointer user_data);
+    static void grilo_source_removed(GrlRegistry *registry, GrlSource *src, gpointer user_data);
+    static void grilo_content_changed_cb(GrlSource *source, GPtrArray *changed_media,
+                                         GrlSourceChangeType change_type, gboolean location_unknown,
+                                         gpointer data);
 
-  void loadConfigurationFile();
+    void loadConfigurationFile();
 
-  GrlRegistry *m_registry;
-  QStringList m_sources;
-  QString m_configurationFile;
+    GrlRegistry *m_registry;
+    QStringList m_sources;
+    QString m_configurationFile;
 };
 
 #endif /* GRILO_REGISTRY_H */

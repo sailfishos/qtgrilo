@@ -32,10 +32,10 @@ class GriloPlugin : public QQmlExtensionPlugin
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "org.nemomobile.grilo")
 public:
-  GriloPlugin(QObject *parent = 0);
-  ~GriloPlugin();
+    GriloPlugin(QObject *parent = 0);
+    ~GriloPlugin();
 
-  virtual void registerTypes(const char *uri);
+    virtual void registerTypes(const char *uri);
 };
 
 

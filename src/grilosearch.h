@@ -27,48 +27,49 @@
 #include <GriloQt>
 #include <GriloDataSource>
 
-class GRILO_QT_EXPORT GriloSearch : public GriloDataSource {
-  Q_OBJECT
+class GRILO_QT_EXPORT GriloSearch : public GriloDataSource
+{
+    Q_OBJECT
 
-  Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
-  Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
-  Q_PROPERTY(QVariantList supportedKeys READ supportedKeys NOTIFY supportedKeysChanged)
-  Q_PROPERTY(QVariantList slowKeys READ slowKeys NOTIFY slowKeysChanged)
-  Q_PROPERTY(bool available READ isAvailable NOTIFY availabilityChanged)
+    Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
+    Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
+    Q_PROPERTY(QVariantList supportedKeys READ supportedKeys NOTIFY supportedKeysChanged)
+    Q_PROPERTY(QVariantList slowKeys READ slowKeys NOTIFY slowKeysChanged)
+    Q_PROPERTY(bool available READ isAvailable NOTIFY availabilityChanged)
 
 public:
-  GriloSearch(QObject *parent = 0);
-  ~GriloSearch();
+    GriloSearch(QObject *parent = 0);
+    ~GriloSearch();
 
-  bool refresh();
+    bool refresh();
 
-  QString source() const;
-  void setSource(const QString& source);
+    QString source() const;
+    void setSource(const QString &source);
 
-  QString text() const;
-  void setText(const QString& text);
+    QString text() const;
+    void setText(const QString &text);
 
-  QVariantList supportedKeys() const;
-  QVariantList slowKeys() const;
+    QVariantList supportedKeys() const;
+    QVariantList slowKeys() const;
 
-  bool isAvailable() const;
+    bool isAvailable() const;
 
 signals:
-  void sourceChanged();
-  void textChanged();
-  void supportedKeysChanged();
-  void slowKeysChanged();
-  void availabilityChanged();
+    void sourceChanged();
+    void textChanged();
+    void supportedKeysChanged();
+    void slowKeysChanged();
+    void availabilityChanged();
 
 private:
-  void availableSourcesChanged();
+    void availableSourcesChanged();
 
-  QString m_source;
-  QString m_text;
+    QString m_source;
+    QString m_text;
 
-  QVariantList m_slowKeys;
-  QVariantList m_supportedKeys;
-  bool m_available;
+    QVariantList m_slowKeys;
+    QVariantList m_supportedKeys;
+    bool m_available;
 };
 
 #endif /* GRILO_SEARCH_H */

@@ -24,66 +24,72 @@
 #include "griloregistry.h"
 
 GriloMultiSearch::GriloMultiSearch(QObject *parent) :
-  GriloDataSource(parent) {
+    GriloDataSource(parent)
+{
 
 }
 
-GriloMultiSearch::~GriloMultiSearch() {
+GriloMultiSearch::~GriloMultiSearch()
+{
 
 }
 
-bool GriloMultiSearch::refresh() {
-  cancelRefresh();
+bool GriloMultiSearch::refresh()
+{
+    cancelRefresh();
 
-  if (!m_registry) {
-    qWarning() << "GriloRegistry not set";
-    return false;
-  }
-
-  GList *sources = NULL;
-
-  foreach (const QString& src, m_sources) {
-    GrlSource *elem = m_registry->lookupSource(src);
-    if (elem) {
-      sources = g_list_append(sources, elem);
+    if (!m_registry) {
+        qWarning() << "GriloRegistry not set";
+        return false;
     }
-    else {
-      qWarning() << "Failed to obtain source for" << src;
+
+    GList *sources = NULL;
+
+    foreach (const QString &src, m_sources) {
+        GrlSource *elem = m_registry->lookupSource(src);
+        if (elem) {
+            sources = g_list_append(sources, elem);
+        } else {
+            qWarning() << "Failed to obtain source for" << src;
+        }
     }
-  }
 
-  GList *keys = keysAsList();
-  GrlOperationOptions *options = operationOptions(NULL, Search);
+    GList *keys = keysAsList();
+    GrlOperationOptions *options = operationOptions(NULL, Search);
 
-  m_opId = grl_multiple_search(sources, m_text.toUtf8().constData(),
-			       keys, options, grilo_source_result_cb, this);
+    m_opId = grl_multiple_search(sources, m_text.toUtf8().constData(),
+                                 keys, options, grilo_source_result_cb, this);
 
-  g_list_free(sources);
+    g_list_free(sources);
 
-  g_object_unref(options);
-  g_list_free(keys);
+    g_object_unref(options);
+    g_list_free(keys);
 
-  return m_opId != 0;
+    return m_opId != 0;
 }
 
-QStringList GriloMultiSearch::sources() const {
-  return m_sources;
+QStringList GriloMultiSearch::sources() const
+{
+    return m_sources;
 }
 
-void GriloMultiSearch::setSources(const QStringList& sources) {
-  if (m_sources != sources) {
-    m_sources = sources;
-    emit sourcesChanged();
-  }
+void GriloMultiSearch::setSources(const QStringList &sources)
+{
+    if (m_sources != sources) {
+        m_sources = sources;
+        emit sourcesChanged();
+    }
 }
 
-QString GriloMultiSearch::text() const {
-  return m_text;
+QString GriloMultiSearch::text() const
+{
+    return m_text;
 }
 
-void GriloMultiSearch::setText(const QString& text) {
-  if (m_text != text) {
-    m_text = text;
-    emit textChanged();
-  }
+void GriloMultiSearch::setText(const QString &text)
+{
+    if (m_text != text) {
+        m_text = text;
+        emit textChanged();
+    }
 }

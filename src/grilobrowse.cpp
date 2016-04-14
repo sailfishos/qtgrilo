@@ -25,143 +25,153 @@
 #include "grilomedia.h"
 
 GriloBrowse::GriloBrowse(QObject *parent) :
-  GriloDataSource(parent),
-  m_media(0),
-  m_available(false) {
+    GriloDataSource(parent),
+    m_media(0),
+    m_available(false)
+{
 
 }
 
-GriloBrowse::~GriloBrowse() {
-  setBaseMedia(QString());
+GriloBrowse::~GriloBrowse()
+{
+    setBaseMedia(QString());
 }
 
-bool GriloBrowse::refresh() {
-  cancelRefresh();
+bool GriloBrowse::refresh()
+{
+    cancelRefresh();
 
-  if (!m_registry) {
-    qWarning() << "GriloRegistry not set";
-    return false;
-  }
+    if (!m_registry) {
+        qWarning() << "GriloRegistry not set";
+        return false;
+    }
 
-  if (m_source.isEmpty()) {
-    qWarning() << "source id not set";
-    return false;
-  }
+    if (m_source.isEmpty()) {
+        qWarning() << "source id not set";
+        return false;
+    }
 
-  GrlSource *src = m_registry->lookupSource(m_source);
+    GrlSource *src = m_registry->lookupSource(m_source);
 
-  if (!src) {
-    qWarning() << "Failed to get source" << m_source;
-    return false;
-  }
+    if (!src) {
+        qWarning() << "Failed to get source" << m_source;
+        return false;
+    }
 
-  GList *keys = keysAsList();
-  GrlOperationOptions *options = operationOptions(src, Browse);
+    GList *keys = keysAsList();
+    GrlOperationOptions *options = operationOptions(src, Browse);
 
-  m_opId = grl_source_browse(src, rootMedia(),
-			     keys, options, grilo_source_result_cb, this);
+    m_opId = grl_source_browse(src, rootMedia(),
+                               keys, options, grilo_source_result_cb, this);
 
-  g_object_unref(options);
-  g_list_free(keys);
+    g_object_unref(options);
+    g_list_free(keys);
 
-  return m_opId != 0;
+    return m_opId != 0;
 }
 
-QString GriloBrowse::source() const {
-  return m_source;
+QString GriloBrowse::source() const
+{
+    return m_source;
 }
 
-void GriloBrowse::setSource(const QString& source) {
-  if (m_source != source) {
-    m_source = source;
-    emit sourceChanged();
-    emit slowKeysChanged();
-    emit supportedKeysChanged();
-  }
+void GriloBrowse::setSource(const QString &source)
+{
+    if (m_source != source) {
+        m_source = source;
+        emit sourceChanged();
+        emit slowKeysChanged();
+        emit supportedKeysChanged();
+    }
 }
 
-QString GriloBrowse::baseMedia() const {
-  return m_baseMedia;
+QString GriloBrowse::baseMedia() const
+{
+    return m_baseMedia;
 }
 
-void GriloBrowse::setBaseMedia(const QString& media){
-  if (m_baseMedia == media) {
-    return;
-  }
+void GriloBrowse::setBaseMedia(const QString &media)
+{
+    if (m_baseMedia == media) {
+        return;
+    }
 
-  if (m_media) {
-    delete m_media;
-    m_media = 0;
-  }
+    if (m_media) {
+        delete m_media;
+        m_media = 0;
+    }
 
-  m_baseMedia = media;
+    m_baseMedia = media;
 
-  emit baseMediaChanged();
+    emit baseMediaChanged();
 }
 
-QVariantList GriloBrowse::supportedKeys() const {
-  if (m_source.isEmpty() || !m_registry) {
+QVariantList GriloBrowse::supportedKeys() const
+{
+    if (m_source.isEmpty() || !m_registry) {
+        return QVariantList();
+    }
+
+    GrlSource *src = m_registry->lookupSource(m_source);
+    if (src) {
+        return listToVariantList(grl_source_supported_keys(src));
+    }
+
     return QVariantList();
-  }
-
-  GrlSource *src = m_registry->lookupSource(m_source);
-  if (src) {
-    return listToVariantList(grl_source_supported_keys(src));
-  }
-
-  return QVariantList();
 }
 
-QVariantList GriloBrowse::slowKeys() const {
-  if (m_source.isEmpty() || !m_registry) {
+QVariantList GriloBrowse::slowKeys() const
+{
+    if (m_source.isEmpty() || !m_registry) {
+        return QVariantList();
+    }
+
+    GrlSource *src = m_registry->lookupSource(m_source);
+    if (src) {
+        return listToVariantList(grl_source_slow_keys(src));
+    }
+
     return QVariantList();
-  }
-
-  GrlSource *src = m_registry->lookupSource(m_source);
-  if (src) {
-    return listToVariantList(grl_source_slow_keys(src));
-  }
-
-  return QVariantList();
 }
 
-bool GriloBrowse::isAvailable() const {
-  return m_registry && !m_source.isEmpty() &&
-    m_registry->availableSources().indexOf(m_source) != -1;
+bool GriloBrowse::isAvailable() const
+{
+    return m_registry && !m_source.isEmpty() &&
+           m_registry->availableSources().indexOf(m_source) != -1;
 }
 
-void GriloBrowse::availableSourcesChanged() {
-  bool available = isAvailable();
+void GriloBrowse::availableSourcesChanged()
+{
+    bool available = isAvailable();
 
-  if (m_available != available) {
-    m_available = available;
+    if (m_available != available) {
+        m_available = available;
 
-    emit availabilityChanged();
-  }
+        emit availabilityChanged();
+    }
 
-  if (!m_available && m_opId) {
-    // A source has disappeared while an operation is already running.
-    // Most grilo will crash soon but we will just reset the opId
-    m_opId = 0;
-  }
+    if (!m_available && m_opId) {
+        // A source has disappeared while an operation is already running.
+        // Most grilo will crash soon but we will just reset the opId
+        m_opId = 0;
+    }
 }
 
-GrlMedia *GriloBrowse::rootMedia() {
-  if (m_media) {
-    return m_media->media();
-  }
-  else if (m_baseMedia.isEmpty()) {
+GrlMedia *GriloBrowse::rootMedia()
+{
+    if (m_media) {
+        return m_media->media();
+    } else if (m_baseMedia.isEmpty()) {
+        return NULL;
+    }
+
+    GrlMedia *m = grl_media_unserialize(m_baseMedia.toUtf8().constData());
+    if (m) {
+        m_media = new GriloMedia(m);
+        return m_media->media();
+    } else {
+        qDebug() << "Failed to create GrlMedia from" << m_baseMedia;
+    }
+
     return NULL;
-  }
-
-  GrlMedia *m = grl_media_unserialize(m_baseMedia.toUtf8().constData());
-  if (m) {
-    m_media = new GriloMedia(m);
-    return m_media->media();
-  }
-  else {
-    qDebug() << "Failed to create GrlMedia from" << m_baseMedia;
-  }
-
-  return NULL;
 }

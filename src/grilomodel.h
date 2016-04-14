@@ -33,40 +33,41 @@
 class GriloMedia;
 class GriloDataSource;
 
-class GRILO_QT_EXPORT GriloModel : public QAbstractListModel {
-  Q_OBJECT
+class GRILO_QT_EXPORT GriloModel : public QAbstractListModel
+{
+    Q_OBJECT
 
-  Q_PROPERTY(GriloDataSource* source READ source WRITE setSource NOTIFY sourceChanged)
-  Q_PROPERTY(int count READ count NOTIFY countChanged)
+    Q_PROPERTY(GriloDataSource *source READ source WRITE setSource NOTIFY sourceChanged)
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
 
-  friend class GriloDataSource;
+    friend class GriloDataSource;
 
 public:
-  enum {
-    MediaRole = Qt::UserRole + 1,
-  };
+    enum {
+        MediaRole = Qt::UserRole + 1,
+    };
 
-  GriloModel(QObject *parent = 0);
-  virtual ~GriloModel();
+    GriloModel(QObject *parent = 0);
+    virtual ~GriloModel();
 
-  QHash<int, QByteArray> roleNames() const;
+    QHash<int, QByteArray> roleNames() const;
 
-  int rowCount(const QModelIndex& parent = QModelIndex()) const;
-  QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
-  GriloDataSource *source() const;
-  void setSource(GriloDataSource *source);
+    GriloDataSource *source() const;
+    void setSource(GriloDataSource *source);
 
-  int count() const;
+    int count() const;
 
 signals:
-  void sourceChanged();
-  void countChanged();
+    void sourceChanged();
+    void countChanged();
 
 private:
-  GriloDataSource *m_source;
+    GriloDataSource *m_source;
 
-  mutable QHash<int, QByteArray> m_roleNames;
+    mutable QHash<int, QByteArray> m_roleNames;
 };
 
 #endif /* GRILO_MODEL_H */

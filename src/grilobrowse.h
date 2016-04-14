@@ -29,51 +29,52 @@
 
 class GriloMedia;
 
-class GRILO_QT_EXPORT GriloBrowse : public GriloDataSource {
-  Q_OBJECT
+class GRILO_QT_EXPORT GriloBrowse : public GriloDataSource
+{
+    Q_OBJECT
 
-  Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
-  Q_PROPERTY(QVariantList supportedKeys READ supportedKeys NOTIFY supportedKeysChanged)
-  Q_PROPERTY(QVariantList slowKeys READ slowKeys NOTIFY slowKeysChanged)
-  Q_PROPERTY(bool available READ isAvailable NOTIFY availabilityChanged)
-  Q_PROPERTY(QString baseMedia READ baseMedia WRITE setBaseMedia NOTIFY baseMediaChanged)
+    Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
+    Q_PROPERTY(QVariantList supportedKeys READ supportedKeys NOTIFY supportedKeysChanged)
+    Q_PROPERTY(QVariantList slowKeys READ slowKeys NOTIFY slowKeysChanged)
+    Q_PROPERTY(bool available READ isAvailable NOTIFY availabilityChanged)
+    Q_PROPERTY(QString baseMedia READ baseMedia WRITE setBaseMedia NOTIFY baseMediaChanged)
 
 public:
-  GriloBrowse(QObject *parent = 0);
-  ~GriloBrowse();
+    GriloBrowse(QObject *parent = 0);
+    ~GriloBrowse();
 
-  bool refresh();
+    bool refresh();
 
-  QString source() const;
-  void setSource(const QString& source);
+    QString source() const;
+    void setSource(const QString &source);
 
-  QString baseMedia() const;
-  void setBaseMedia(const QString& media);
+    QString baseMedia() const;
+    void setBaseMedia(const QString &media);
 
-  QVariantList supportedKeys() const;
-  QVariantList slowKeys() const;
+    QVariantList supportedKeys() const;
+    QVariantList slowKeys() const;
 
-  bool isAvailable() const;
+    bool isAvailable() const;
 
 signals:
-  void sourceChanged();
-  void supportedKeysChanged();
-  void slowKeysChanged();
-  void availabilityChanged();
-  void baseMediaChanged();
+    void sourceChanged();
+    void supportedKeysChanged();
+    void slowKeysChanged();
+    void availabilityChanged();
+    void baseMediaChanged();
 
 private:
-  void availableSourcesChanged();
+    void availableSourcesChanged();
 
-  GrlMedia *rootMedia();
+    GrlMedia *rootMedia();
 
-  QString m_source;
+    QString m_source;
 
-  GriloMedia *m_media;
-  QString m_baseMedia;
-  QVariantList m_slowKeys;
-  QVariantList m_supportedKeys;
-  bool m_available;
+    GriloMedia *m_media;
+    QString m_baseMedia;
+    QVariantList m_slowKeys;
+    QVariantList m_supportedKeys;
+    bool m_available;
 };
 
 #endif /* GRILO_BROWSE_H */

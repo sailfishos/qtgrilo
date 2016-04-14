@@ -28,19 +28,22 @@
 #include <QQmlEngine>
 
 DeclarativeGriloModel::DeclarativeGriloModel(QObject *parent) :
-  GriloModel(parent) {
+    GriloModel(parent)
+{
 }
 
-DeclarativeGriloModel::~DeclarativeGriloModel() {
+DeclarativeGriloModel::~DeclarativeGriloModel()
+{
 }
 
-QObject *DeclarativeGriloModel::get(int rowIndex) const {
-  QVariant mediaVariant = data(index(rowIndex), GriloModel::MediaRole);
+QObject *DeclarativeGriloModel::get(int rowIndex) const
+{
+    QVariant mediaVariant = data(index(rowIndex), GriloModel::MediaRole);
 
-  GriloMedia *media = mediaVariant.value<GriloMedia*>();
-  if (media) {
-    QQmlEngine::setObjectOwnership(media, QQmlEngine::CppOwnership);
-  }
+    GriloMedia *media = mediaVariant.value<GriloMedia *>();
+    if (media) {
+        QQmlEngine::setObjectOwnership(media, QQmlEngine::CppOwnership);
+    }
 
-  return media;
+    return media;
 }
