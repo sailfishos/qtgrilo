@@ -22,13 +22,14 @@
  */
 
 #include "grilomodel.h"
-#include <QDebug>
 #include "grilomedia.h"
 #include "grilodatasource.h"
 
-GriloModel::GriloModel(QObject *parent) :
-    QAbstractListModel(parent),
-    m_source(0)
+#include <QDebug>
+
+GriloModel::GriloModel(QObject *parent)
+    : QAbstractListModel(parent),
+      m_source(0)
 {
     QObject::connect(this, SIGNAL(rowsInserted(const QModelIndex &, int, int)),
                      this, SIGNAL(countChanged()));

@@ -25,9 +25,9 @@
 #define GRILO_MEDIA_H
 
 #include <GriloQt>
+#include <grilo.h>
 
 #include <QObject>
-#include <grilo.h>
 #include <QUrl>
 #include <QVariant>
 #include <QDateTime>

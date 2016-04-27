@@ -23,8 +23,8 @@
 #include "grilomedia.h"
 #include "grilomodel.h"
 #include "griloregistry.h"
-#include <QDebug>
 
+#include <QDebug>
 #include <QTimerEvent>
 
 static void fill_key_id(gpointer data, gpointer user_data)
@@ -33,16 +33,15 @@ static void fill_key_id(gpointer data, gpointer user_data)
     varList->append(GriloDataSource::MetadataKeys(GRLPOINTER_TO_KEYID(data)));
 }
 
-GriloDataSource::GriloDataSource(QObject *parent) :
-    QObject(parent),
-    m_opId(0),
-    m_registry(0),
-    m_count(0),
-    m_skip(0),
-    m_insertIndex(0),
-    m_updateScheduled(false)
+GriloDataSource::GriloDataSource(QObject *parent)
+    : QObject(parent),
+      m_opId(0),
+      m_registry(0),
+      m_count(0),
+      m_skip(0),
+      m_insertIndex(0),
+      m_updateScheduled(false)
 {
-
     m_metadataKeys << Title;
     m_typeFilter << None;
 }

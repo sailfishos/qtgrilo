@@ -27,9 +27,10 @@
 #include <GriloQt>
 
 #include <QObject>
-#include <grilo.h>
 #include <QVariant>
 #include <QBasicTimer>
+
+#include <grilo.h>
 
 class GriloMedia;
 class GriloModel;

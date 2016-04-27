@@ -25,10 +25,9 @@
 #include <QDebug>
 
 
-GriloRegistry::GriloRegistry(QObject *parent) :
-    QObject(parent)
+GriloRegistry::GriloRegistry(QObject *parent)
+    : QObject(parent)
 {
-
     grl_init(0, 0);
 
     m_registry = grl_registry_get_default();

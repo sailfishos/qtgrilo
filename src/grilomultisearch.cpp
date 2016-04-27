@@ -20,18 +20,17 @@
  */
 
 #include "grilomultisearch.h"
-#include <QDebug>
 #include "griloregistry.h"
 
-GriloMultiSearch::GriloMultiSearch(QObject *parent) :
-    GriloDataSource(parent)
-{
+#include <QDebug>
 
+GriloMultiSearch::GriloMultiSearch(QObject *parent)
+    : GriloDataSource(parent)
+{
 }
 
 GriloMultiSearch::~GriloMultiSearch()
 {
-
 }
 
 bool GriloMultiSearch::refresh()

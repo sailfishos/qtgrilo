@@ -20,18 +20,18 @@
  */
 
 #include "grilosearch.h"
-#include <QDebug>
 #include "griloregistry.h"
 
-GriloSearch::GriloSearch(QObject *parent) :
-    GriloDataSource(parent),
-    m_available(false)
+#include <QDebug>
+
+GriloSearch::GriloSearch(QObject *parent)
+    : GriloDataSource(parent),
+      m_available(false)
 {
 }
 
 GriloSearch::~GriloSearch()
 {
-
 }
 
 bool GriloSearch::refresh()

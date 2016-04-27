@@ -23,10 +23,9 @@
 
 #include <QDebug>
 
-GriloMedia::GriloMedia(GrlMedia *media, QObject *parent) :
-    QObject(parent), m_media(media)
+GriloMedia::GriloMedia(GrlMedia *media, QObject *parent)
+    : QObject(parent), m_media(media)
 {
-
 }
 
 GriloMedia::~GriloMedia()

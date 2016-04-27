@@ -27,8 +27,8 @@
 
 #include <QQmlEngine>
 
-DeclarativeGriloModel::DeclarativeGriloModel(QObject *parent) :
-    GriloModel(parent)
+DeclarativeGriloModel::DeclarativeGriloModel(QObject *parent)
+    : GriloModel(parent)
 {
 }
 
