@@ -29,31 +29,32 @@
 
 #include <QStringList>
 
-class GRILO_QT_EXPORT GriloMultiSearch : public GriloDataSource {
-  Q_OBJECT
+class GRILO_QT_EXPORT GriloMultiSearch : public GriloDataSource
+{
+    Q_OBJECT
 
-  Q_PROPERTY(QStringList sources READ sources WRITE setSources NOTIFY sourcesChanged);
-  Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged);
+    Q_PROPERTY(QStringList sources READ sources WRITE setSources NOTIFY sourcesChanged)
+    Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
 
 public:
-  GriloMultiSearch(QObject *parent = 0);
-  ~GriloMultiSearch();
+    GriloMultiSearch(QObject *parent = 0);
+    ~GriloMultiSearch();
 
-  bool refresh();
+    bool refresh();
 
-  QStringList sources() const;
-  void setSources(const QStringList& sources);
+    QStringList sources() const;
+    void setSources(const QStringList &sources);
 
-  QString text() const;
-  void setText(const QString& text);
+    QString text() const;
+    void setText(const QString &text);
 
 signals:
-  void sourcesChanged();
-  void textChanged();
+    void sourcesChanged();
+    void textChanged();
 
 private:
-  QStringList m_sources;
-  QString m_text;
+    QStringList m_sources;
+    QString m_text;
 };
 
 #endif /* GRILO_MULTI_SEARCH_H */

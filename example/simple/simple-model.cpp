@@ -67,31 +67,30 @@ SimpleModel::~SimpleModel()
     }
 }
 
-QVariant SimpleModel::data(const QModelIndex& index, int role) const
+QVariant SimpleModel::data(const QModelIndex &index, int role) const
 {
     QVariant mediaVariant = GriloModel::data(index, GriloModel::MediaRole);
 
     switch (role) {
     case GriloModel::MediaRole:
         return mediaVariant;
-    case Qt::DisplayRole:
-        {
-            GriloMedia *media = mediaVariant.value<GriloMedia*>();
-            if (!media) {
-                return QVariant();
-            }
-            return media->title();
+    case Qt::DisplayRole: {
+        GriloMedia *media = mediaVariant.value<GriloMedia *>();
+        if (!media) {
+            return QVariant();
         }
+        return media->title();
+    }
     default:
         return QVariant();
     }
 }
 
-void SimpleModel::onItemClicked(const QModelIndex& index)
+void SimpleModel::onItemClicked(const QModelIndex &index)
 {
     QVariant mediaVariant = data(index, GriloModel::MediaRole);
 
-    GriloMedia *media = mediaVariant.value<GriloMedia*>();
+    GriloMedia *media = mediaVariant.value<GriloMedia *>();
     if (!media) {
         return;
     }

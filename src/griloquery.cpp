@@ -20,125 +20,135 @@
  */
 
 #include "griloquery.h"
-#include <QDebug>
 #include "griloregistry.h"
 
-GriloQuery::GriloQuery(QObject *parent) :
-  GriloDataSource(parent),
-  m_available(false) {
+#include <QDebug>
 
+GriloQuery::GriloQuery(QObject *parent)
+    : GriloDataSource(parent),
+      m_available(false)
+{
 }
 
-GriloQuery::~GriloQuery() {
-
+GriloQuery::~GriloQuery()
+{
 }
 
-bool GriloQuery::refresh() {
-  cancelRefresh();
+bool GriloQuery::refresh()
+{
+    cancelRefresh();
 
-  if (!m_registry) {
-    qWarning() << "GriloRegistry not set";
-    return false;
-  }
+    if (!m_registry) {
+        qWarning() << "GriloRegistry not set";
+        return false;
+    }
 
-  if (m_source.isEmpty()) {
-    qWarning() << "source id not set";
-    return false;
-  }
+    if (m_source.isEmpty()) {
+        qWarning() << "source id not set";
+        return false;
+    }
 
-  GrlSource *src = m_registry->lookupSource(m_source);
+    GrlSource *src = m_registry->lookupSource(m_source);
 
-  if (!src) {
-    qWarning() << "Failed to get source" << m_source;
-    return false;
-  }
+    if (!src) {
+        qWarning() << "Failed to get source" << m_source;
+        return false;
+    }
 
-  GList *keys = keysAsList();
-  GrlOperationOptions *options = operationOptions(src, Search);
-  m_opId = grl_source_query(src, m_query.toUtf8().constData(),
-			    keys, options, grilo_source_result_cb, this);
+    GList *keys = keysAsList();
+    GrlOperationOptions *options = operationOptions(src, Search);
+    m_opId = grl_source_query(src, m_query.toUtf8().constData(),
+                              keys, options, grilo_source_result_cb, this);
 
-  g_object_unref(options);
-  g_list_free(keys);
+    g_object_unref(options);
+    g_list_free(keys);
 
-  return m_opId != 0;
+    return m_opId != 0;
 }
 
-QString GriloQuery::source() const {
-  return m_source;
+QString GriloQuery::source() const
+{
+    return m_source;
 }
 
-void GriloQuery::setSource(const QString& source) {
-  if (m_source != source) {
-    m_source = source;
-    emit sourceChanged();
-    emit slowKeysChanged();
-    emit supportedKeysChanged();
-  }
+void GriloQuery::setSource(const QString &source)
+{
+    if (m_source != source) {
+        m_source = source;
+        emit sourceChanged();
+        emit slowKeysChanged();
+        emit supportedKeysChanged();
+    }
 }
 
-QString GriloQuery::query() const {
-  return m_query;
+QString GriloQuery::query() const
+{
+    return m_query;
 }
 
-void GriloQuery::setQuery(const QString& query) {
-  if (m_query != query) {
-    m_query = query;
-    emit queryChanged();
-  }
+void GriloQuery::setQuery(const QString &query)
+{
+    if (m_query != query) {
+        m_query = query;
+        emit queryChanged();
+    }
 }
 
-QVariantList GriloQuery::supportedKeys() const {
-  if (m_source.isEmpty() || !m_registry) {
+QVariantList GriloQuery::supportedKeys() const
+{
+    if (m_source.isEmpty() || !m_registry) {
+        return QVariantList();
+    }
+
+    GrlSource *src = m_registry->lookupSource(m_source);
+    if (src) {
+        return listToVariantList(grl_source_supported_keys(src));
+    }
+
     return QVariantList();
-  }
-
-  GrlSource *src = m_registry->lookupSource(m_source);
-  if (src) {
-    return listToVariantList(grl_source_supported_keys(src));
-  }
-
-  return QVariantList();
 }
 
-QVariantList GriloQuery::slowKeys() const {
-  if (m_source.isEmpty() || !m_registry) {
+QVariantList GriloQuery::slowKeys() const
+{
+    if (m_source.isEmpty() || !m_registry) {
+        return QVariantList();
+    }
+
+    GrlSource *src = m_registry->lookupSource(m_source);
+    if (src) {
+        return listToVariantList(grl_source_slow_keys(src));
+    }
+
     return QVariantList();
-  }
-
-  GrlSource *src = m_registry->lookupSource(m_source);
-  if (src) {
-    return listToVariantList(grl_source_slow_keys(src));
-  }
-
-  return QVariantList();
 }
 
-bool GriloQuery::isAvailable() const {
-  return m_registry && !m_source.isEmpty() &&
-    m_registry->availableSources().indexOf(m_source) != -1;
+bool GriloQuery::isAvailable() const
+{
+    return m_registry && !m_source.isEmpty() &&
+           m_registry->availableSources().indexOf(m_source) != -1;
 }
 
-void GriloQuery::availableSourcesChanged() {
-  bool available = isAvailable();
+void GriloQuery::availableSourcesChanged()
+{
+    bool available = isAvailable();
 
-  if (m_available != available) {
-    m_available = available;
+    if (m_available != available) {
+        m_available = available;
 
-    emit availabilityChanged();
-  }
+        emit availabilityChanged();
+    }
 
-  if (!m_available && m_opId) {
-    // A source has disappeared while an operation is already running.
-    // Not sure how will grilo behave but we will just reset the opId
-    m_opId = 0;
-  }
+    if (!m_available && m_opId) {
+        // A source has disappeared while an operation is already running.
+        // Not sure how will grilo behave but we will just reset the opId
+        m_opId = 0;
+    }
 }
 
 void GriloQuery::contentChanged(const QString &source, GrlSourceChangeType change_type,
                                 GPtrArray *changed_media)
 {
-  if (source == m_source) {
-    updateContent(change_type, changed_media);
-  }
+    if (source == m_source) {
+        updateContent(change_type, changed_media);
+    }
 }

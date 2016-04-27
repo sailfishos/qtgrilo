@@ -43,7 +43,8 @@ int main(int argc, char *argv[])
     view.setModel(&simpleModel);
     view.setWindowTitle("Simple Grilo Model");
 
-    QObject::connect(&view, SIGNAL(clicked(const QModelIndex&)), &simpleModel, SLOT(onItemClicked(const QModelIndex&)));
+    QObject::connect(&view, SIGNAL(clicked(const QModelIndex &)), &simpleModel,
+                     SLOT(onItemClicked(const QModelIndex &)));
 
     view.show();
 

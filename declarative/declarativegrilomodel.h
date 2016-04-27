@@ -28,14 +28,15 @@
 
 #include <GriloModel>
 
-class DeclarativeGriloModel : public GriloModel {
-  Q_OBJECT
+class DeclarativeGriloModel : public GriloModel
+{
+    Q_OBJECT
 
 public:
-  DeclarativeGriloModel(QObject *parent = 0);
-  ~DeclarativeGriloModel();
+    DeclarativeGriloModel(QObject *parent = 0);
+    ~DeclarativeGriloModel();
 
-  Q_INVOKABLE QObject *get(int rowIndex) const;
+    Q_INVOKABLE QObject *get(int rowIndex) const;
 };
 
 #endif /* DECLARATIVE_GRILO_MODEL_H */
