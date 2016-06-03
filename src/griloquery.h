@@ -54,7 +54,7 @@ public:
 
     bool isAvailable() const;
 
-signals:
+Q_SIGNALS:
     void sourceChanged();
     void queryChanged();
     void supportedKeysChanged();

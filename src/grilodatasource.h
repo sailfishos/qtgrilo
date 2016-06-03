@@ -130,11 +130,11 @@ public:
 
     Q_INVOKABLE virtual bool refresh() = 0;
 
-public slots:
+public Q_SLOTS:
     void cancelRefresh();
     virtual void availableSourcesChanged() = 0;
 
-signals:
+Q_SIGNALS:
     void registryChanged();
     void countChanged();
     void skipChanged();
@@ -177,7 +177,7 @@ protected:
     QVariantList m_metadataKeys;
     QVariantList m_typeFilter;
 
-protected slots:
+protected Q_SLOTS:
     virtual void contentChanged(const QString &source, GrlSourceChangeType change_type,
                                 GPtrArray *changed_media);
 

@@ -1,5 +1,5 @@
 TEMPLATE = lib
-CONFIG += qt plugin link_pkgconfig
+CONFIG += qt plugin link_pkgconfig no_keywords
 DEPENDPATH += ../src
 INCLUDEPATH += ../src
 

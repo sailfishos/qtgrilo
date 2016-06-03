@@ -98,18 +98,18 @@ void GriloDataSource::addMedia(GrlMedia *media)
             dataChanged = true;
         } else if (index != -1) {
             dataChanged = true;
-            foreach (GriloModel *model, m_models) {
+            Q_FOREACH (GriloModel *model, m_models) {
                 model->beginMoveRows(QModelIndex(), index, index, QModelIndex(), m_insertIndex);
             }
             m_media.move(index, m_insertIndex);
-            foreach (GriloModel *model, m_models) {
+            Q_FOREACH (GriloModel *model, m_models) {
                 model->endMoveRows();
             }
         }
 
         if (dataChanged) {
             wrappedMedia->setMedia(media);
-            foreach (GriloModel *model, m_models) {
+            Q_FOREACH (GriloModel *model, m_models) {
                 QModelIndex modelIndex = model->index(m_insertIndex, 0);
                 model->dataChanged(modelIndex, modelIndex);
             }
@@ -120,7 +120,7 @@ void GriloDataSource::addMedia(GrlMedia *media)
 
     wrappedMedia = new GriloMedia(media);
 
-    foreach (GriloModel *model, m_models) {
+    Q_FOREACH (GriloModel *model, m_models) {
         model->beginInsertRows(QModelIndex(), m_insertIndex, m_insertIndex);
     }
 
@@ -132,7 +132,7 @@ void GriloDataSource::addMedia(GrlMedia *media)
         m_hash.insert(id, wrappedMedia);
     }
 
-    foreach (GriloModel *model, m_models) {
+    Q_FOREACH (GriloModel *model, m_models) {
         model->endInsertRows();
     }
 
@@ -154,7 +154,7 @@ void GriloDataSource::removeMedia(GrlMedia *media)
     }
 
     // remove from models:
-    foreach (GriloModel *model, m_models) {
+    Q_FOREACH (GriloModel *model, m_models) {
         model->beginRemoveRows(QModelIndex(), index, index);
     }
 
@@ -167,7 +167,7 @@ void GriloDataSource::removeMedia(GrlMedia *media)
     // destroy
     wrapper->deleteLater();
 
-    foreach (GriloModel *model, m_models) {
+    Q_FOREACH (GriloModel *model, m_models) {
         model->endRemoveRows();
     }
 }
@@ -180,7 +180,7 @@ void GriloDataSource::clearMedia()
 
     int size = m_media.size();
 
-    foreach (GriloModel *model, m_models) {
+    Q_FOREACH (GriloModel *model, m_models) {
         model->beginRemoveRows(QModelIndex(), 0, size - 1);
     }
 
@@ -188,7 +188,7 @@ void GriloDataSource::clearMedia()
     m_media.clear();
     m_hash.clear();
 
-    foreach (GriloModel *model, m_models) {
+    Q_FOREACH (GriloModel *model, m_models) {
         model->endRemoveRows();
     }
 }
@@ -211,7 +211,7 @@ void GriloDataSource::setRegistry(GriloRegistry *registry)
         QObject::connect(m_registry, SIGNAL(contentChanged(QString, GrlSourceChangeType, GPtrArray *)),
                          this, SLOT(contentChanged(QString, GrlSourceChangeType, GPtrArray *)));
 
-        emit registryChanged();
+        Q_EMIT registryChanged();
     }
 }
 
@@ -224,7 +224,7 @@ void GriloDataSource::setCount(int count)
 {
     if (m_count != count) {
         m_count = count;
-        emit countChanged();
+        Q_EMIT countChanged();
     }
 }
 
@@ -237,7 +237,7 @@ void GriloDataSource::setSkip(int skip)
 {
     if (m_skip != skip) {
         m_skip = skip;
-        emit skipChanged();
+        Q_EMIT skipChanged();
     }
 }
 
@@ -250,7 +250,7 @@ void GriloDataSource::setMetadataKeys(const QVariantList &keys)
 {
     if (m_metadataKeys != keys) {
         m_metadataKeys = keys;
-        emit metadataKeysChanged();
+        Q_EMIT metadataKeysChanged();
     }
 }
 
@@ -263,7 +263,7 @@ void GriloDataSource::setTypeFilter(const QVariantList &filter)
 {
     if (m_typeFilter != filter) {
         m_typeFilter = filter;
-        emit typeFilterChanged();
+        Q_EMIT typeFilterChanged();
     }
 }
 
@@ -285,7 +285,7 @@ GrlOperationOptions *GriloDataSource::operationOptions(GrlSource *src, const Ope
     }
 
     int typeFilter = 0;
-    foreach (const QVariant &var, m_typeFilter) {
+    Q_FOREACH (const QVariant &var, m_typeFilter) {
         if (var.canConvert<int>()) {
             typeFilter |= var.toInt();
         }
@@ -301,7 +301,7 @@ GList *GriloDataSource::keysAsList()
     // TODO: Check why using  grl_metadata_key_list_new() produces a symbol error.
     GList *keys = NULL;
 
-    foreach (const QVariant &var, m_metadataKeys) {
+    Q_FOREACH (const QVariant &var, m_metadataKeys) {
         if (var.canConvert<int>()) {
             keys = g_list_append(keys, GRLKEYID_TO_POINTER(var.toInt()));
         }
@@ -366,7 +366,7 @@ void GriloDataSource::grilo_source_result_cb(GrlSource *source, guint op_id,
 
         // If there are items from a previous fetch still remaining remove them.
         if (that->m_insertIndex < that->m_media.count()) {
-            foreach (GriloModel *model, that->m_models) {
+            Q_FOREACH (GriloModel *model, that->m_models) {
                 model->beginRemoveRows(QModelIndex(), that->m_insertIndex, that->m_media.count() - 1);
             }
             while (that->m_media.count() > that->m_insertIndex) {
@@ -374,11 +374,11 @@ void GriloDataSource::grilo_source_result_cb(GrlSource *source, guint op_id,
                 that->m_hash.remove(media->id());
                 delete media;
             }
-            foreach (GriloModel *model, that->m_models) {
+            Q_FOREACH (GriloModel *model, that->m_models) {
                 model->endRemoveRows();
             }
         }
-        emit that->finished();
+        Q_EMIT that->finished();
     }
 }
 
@@ -425,6 +425,6 @@ void GriloDataSource::timerEvent(QTimerEvent *event)
 {
     if (event->timerId() == m_updateTimer.timerId()) {
         m_updateTimer.stop();
-        emit contentUpdated();
+        Q_EMIT contentUpdated();
     }
 }
