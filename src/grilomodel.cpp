@@ -96,7 +96,7 @@ void GriloModel::setSource(GriloDataSource *source)
 
     endResetModel();
 
-    emit sourceChanged();
+    Q_EMIT sourceChanged();
 
     if (m_source) {
         m_source->prefill(this);

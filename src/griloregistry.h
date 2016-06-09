@@ -55,7 +55,7 @@ public:
     QString configurationFile() const;
     void setConfigurationFile(const QString &file);
 
-signals:
+Q_SIGNALS:
     void availableSourcesChanged();
     void configurationFileChanged();
     void contentChanged(const QString &source, GrlSourceChangeType change_type,

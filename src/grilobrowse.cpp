@@ -79,9 +79,9 @@ void GriloBrowse::setSource(const QString &source)
 {
     if (m_source != source) {
         m_source = source;
-        emit sourceChanged();
-        emit slowKeysChanged();
-        emit supportedKeysChanged();
+        Q_EMIT sourceChanged();
+        Q_EMIT slowKeysChanged();
+        Q_EMIT supportedKeysChanged();
     }
 }
 
@@ -103,7 +103,7 @@ void GriloBrowse::setBaseMedia(const QString &media)
 
     m_baseMedia = media;
 
-    emit baseMediaChanged();
+    Q_EMIT baseMediaChanged();
 }
 
 QVariantList GriloBrowse::supportedKeys() const
@@ -147,7 +147,7 @@ void GriloBrowse::availableSourcesChanged()
     if (m_available != available) {
         m_available = available;
 
-        emit availabilityChanged();
+        Q_EMIT availabilityChanged();
     }
 
     if (!m_available && m_opId) {

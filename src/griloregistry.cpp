@@ -42,7 +42,7 @@ GriloRegistry::GriloRegistry(QObject *parent)
 
 GriloRegistry::~GriloRegistry()
 {
-    foreach (const QString &source, m_sources) {
+    Q_FOREACH (const QString &source, m_sources) {
         GrlSource *src = lookupSource(source);
         if (src) {
             g_signal_handlers_disconnect_by_data(src, this);
@@ -90,7 +90,7 @@ void GriloRegistry::setConfigurationFile(const QString &file)
 {
     if (m_configurationFile != file) {
         m_configurationFile = file;
-        emit configurationFileChanged();
+        Q_EMIT configurationFileChanged();
 
         loadConfigurationFile();
     }
@@ -126,7 +126,7 @@ void GriloRegistry::grilo_source_added(GrlRegistry *registry, GrlSource *src,
         g_signal_connect(src, "content-changed", G_CALLBACK(grilo_content_changed_cb), reg);
         grl_source_notify_change_start(src, 0);
 
-        emit reg->availableSourcesChanged();
+        Q_EMIT reg->availableSourcesChanged();
     }
 }
 
@@ -143,7 +143,7 @@ void GriloRegistry::grilo_source_removed(GrlRegistry *registry, GrlSource *src,
     if (int index = reg->m_sources.indexOf(id) != -1) {
         reg->m_sources.removeAt(index);
         g_signal_handlers_disconnect_by_data(src, reg);
-        emit reg->availableSourcesChanged();
+        Q_EMIT reg->availableSourcesChanged();
     }
 }
 
@@ -155,7 +155,7 @@ void GriloRegistry::grilo_content_changed_cb(GrlSource *source, GPtrArray *chang
     GriloRegistry *reg = static_cast<GriloRegistry *>(user_data);
 
     const char *id = grl_source_get_id(source);
-    emit reg->contentChanged(id, change_type, changed_media);
+    Q_EMIT reg->contentChanged(id, change_type, changed_media);
 }
 
 GrlSource *GriloRegistry::lookupSource(const QString &id)
