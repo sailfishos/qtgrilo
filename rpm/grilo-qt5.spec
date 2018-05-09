@@ -5,7 +5,7 @@ Version:    0.1.11
 Release:    1
 Group:      Development/Libraries
 License:    BSD
-URL:        https://github.com/nemomobile/qtgrilo
+URL:        https://git.merproject.org/mer-core/qtgrilo
 Source0:    %{name}-%{version}.tar.bz2
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
