@@ -82,4 +82,5 @@ rm -rf %{buildroot}
 %files qml-plugin
 %defattr(-,root,root,-)
 %{_libdir}/qt5/qml/org/nemomobile/grilo/libgrilo-qt5-qml-plugin.so
+%{_libdir}/qt5/qml/org/nemomobile/grilo/plugins.qmltypes
 %{_libdir}/qt5/qml/org/nemomobile/grilo/qmldir
