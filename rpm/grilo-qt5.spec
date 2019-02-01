@@ -1,8 +1,8 @@
 Name:       grilo-qt5
 
 Summary:    Framework for discovering and browsing media, Qt bindings
-Version:    0.1.11
-Release:    1
+Version:    0.1.13
+Release:    2
 Group:      Development/Libraries
 License:    BSD
 URL:        https://git.merproject.org/mer-core/qtgrilo
@@ -39,7 +39,7 @@ QML plugin for %{name}.
 
 %build
 
-%qmake5 
+%qmake5 VERSION=`echo %{version} | sed 's/+.*//'`
 
 make %{?_smp_mflags}
 
