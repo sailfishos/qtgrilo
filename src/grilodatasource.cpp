@@ -277,7 +277,7 @@ GrlOperationOptions *GriloDataSource::operationOptions(GrlSource *src, const Ope
 
     GrlOperationOptions *options = grl_operation_options_new(caps);
 
-    grl_operation_options_set_flags(options, GRL_RESOLVE_IDLE_RELAY); // TODO: hardcoded
+    grl_operation_options_set_resolution_flags(options, GRL_RESOLVE_IDLE_RELAY); // TODO: hardcoded
     grl_operation_options_set_skip(options, m_skip);
 
     if (m_count != 0) {
@@ -327,7 +327,7 @@ void GriloDataSource::grilo_source_result_cb(GrlSource *source, guint op_id,
                                              gpointer user_data, const GError *error)
 {
 
-    Q_UNUSED(source);
+    Q_UNUSED(source)
 
     // We get an error if the operation has been canceled:
     if (error) {
@@ -385,9 +385,9 @@ void GriloDataSource::grilo_source_result_cb(GrlSource *source, guint op_id,
 void GriloDataSource::contentChanged(const QString &source, GrlSourceChangeType change_type,
                                      GPtrArray *changed_media)
 {
-    Q_UNUSED(source);
-    Q_UNUSED(change_type);
-    Q_UNUSED(changed_media);
+    Q_UNUSED(source)
+    Q_UNUSED(change_type)
+    Q_UNUSED(changed_media)
 }
 
 void GriloDataSource::updateContent(GrlSourceChangeType change_type, GPtrArray *changed_media)

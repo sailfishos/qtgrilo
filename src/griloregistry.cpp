@@ -114,7 +114,6 @@ void GriloRegistry::connect_source(gpointer data, gpointer user_data)
 void GriloRegistry::grilo_source_added(GrlRegistry *registry, GrlSource *src,
                                        gpointer user_data)
 {
-
     Q_UNUSED(registry);
 
     GriloRegistry *reg = static_cast<GriloRegistry *>(user_data);
@@ -133,7 +132,6 @@ void GriloRegistry::grilo_source_added(GrlRegistry *registry, GrlSource *src,
 void GriloRegistry::grilo_source_removed(GrlRegistry *registry, GrlSource *src,
                                          gpointer user_data)
 {
-
     Q_UNUSED(registry);
 
     GriloRegistry *reg = static_cast<GriloRegistry *>(user_data);

@@ -96,11 +96,8 @@ void GriloBrowse::setBaseMedia(const QString &media)
         return;
     }
 
-    if (m_media) {
-        delete m_media;
-        m_media = 0;
-    }
-
+    delete m_media;
+    m_media = nullptr;
     m_baseMedia = media;
 
     Q_EMIT baseMediaChanged();

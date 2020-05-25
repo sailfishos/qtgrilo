@@ -56,7 +56,7 @@ QVariant GriloMedia::get(const QString &keyId) const
                                                           keyId.toUtf8().constData());
 
     if (GRL_METADATA_KEY_INVALID == actualKey) {
-        qWarning() << "Grilo key doesn't exist in the registry.";
+        qWarning() << "Grilo key doesn't exist in the registry:" << keyId;
         return QVariant();
     }
 
