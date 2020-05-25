@@ -6,7 +6,7 @@ INCLUDEPATH += ../src
 QT = core qml
 
 LIBS += -L../src -lgrilo-qt5
-PKGCONFIG = grilo-0.2
+PKGCONFIG = grilo-0.3
 
 EXAMPLE = ../example/declarative/*
 

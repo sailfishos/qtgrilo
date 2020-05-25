@@ -107,7 +107,7 @@ int GriloMedia::duration() const
 
 bool GriloMedia::isContainer() const
 {
-    return GRL_IS_MEDIA_BOX(m_media) == TRUE;
+    return grl_media_is_container(m_media) == TRUE;
 }
 
 QString GriloMedia::author() const
@@ -117,65 +117,37 @@ QString GriloMedia::author() const
 
 QString GriloMedia::album() const
 {
-    if (GRL_IS_MEDIA_AUDIO(m_media)) {
-        return QString::fromUtf8(grl_media_audio_get_album(GRL_MEDIA_AUDIO(m_media)));
-    }
-
-    return QString();
+    return QString::fromUtf8(grl_media_get_album(m_media));
 }
 
 QString GriloMedia::artist() const
 {
-    if (GRL_IS_MEDIA_AUDIO(m_media)) {
-        return QString::fromUtf8(grl_media_audio_get_artist(GRL_MEDIA_AUDIO(m_media)));
-    }
-
-    return QString();
+    return QString::fromUtf8(grl_media_get_artist(m_media));
 }
 
 QString GriloMedia::genre() const
 {
-    if (GRL_IS_MEDIA_AUDIO(m_media)) {
-        return QString::fromUtf8(grl_media_audio_get_genre(GRL_MEDIA_AUDIO(m_media)));
-    }
-
-    return QString();
+    return QString::fromUtf8(grl_media_get_genre(m_media));
 }
 
 QUrl GriloMedia::thumbnail() const
 {
-    if (GRL_IS_MEDIA(m_media)) {
-        return QUrl(grl_media_get_thumbnail(GRL_MEDIA(m_media)));
-    }
-
-    return QUrl();
+    return QUrl(grl_media_get_thumbnail(m_media));
 }
 
 int GriloMedia::year() const
 {
-    if (GRL_IS_MEDIA(m_media)) {
-        return g_date_time_get_year(grl_media_get_creation_date(GRL_MEDIA(m_media)));
-    }
-
-    return 0;
-}
+    return g_date_time_get_year(grl_media_get_creation_date(m_media));
+ }
 
 int GriloMedia::trackNumber() const
 {
-    if (GRL_IS_MEDIA_AUDIO(m_media)) {
-        return grl_media_audio_get_track_number(GRL_MEDIA_AUDIO(m_media));
-    }
-
-    return 0;
+    return grl_media_get_track_number(m_media);
 }
 
 int GriloMedia::childCount() const
 {
-    if (GRL_IS_MEDIA_BOX(m_media)) {
-        return grl_media_box_get_childcount(GRL_MEDIA_BOX(m_media));
-    }
-
-    return GRL_METADATA_KEY_CHILDCOUNT_UNKNOWN;
+    return grl_media_get_childcount(m_media);
 }
 
 QString GriloMedia::mimeType() const
@@ -185,12 +157,10 @@ QString GriloMedia::mimeType() const
 
 QDateTime GriloMedia::modificationDate() const
 {
-    if (GRL_IS_MEDIA(m_media)) {
-        GDateTime *dateTime = grl_media_get_modification_date(GRL_MEDIA(m_media));
+    GDateTime *dateTime = grl_media_get_modification_date(m_media);
 
-        if (dateTime) {
-            return QDateTime::fromTime_t(g_date_time_to_unix(dateTime));
-        }
+    if (dateTime) {
+        return QDateTime::fromTime_t(g_date_time_to_unix(dateTime));
     }
 
     return QDateTime();
@@ -198,29 +168,17 @@ QDateTime GriloMedia::modificationDate() const
 
 int GriloMedia::height() const
 {
-    if (GRL_IS_MEDIA_IMAGE(m_media)) {
-        return grl_media_image_get_height(GRL_MEDIA_IMAGE(m_media));
-    }
-
-    return 0;
+    return grl_media_get_height(m_media);
 }
 
 int GriloMedia::orientation() const
 {
-    if (GRL_IS_MEDIA_IMAGE(m_media)) {
-        return grl_media_image_get_orientation(GRL_MEDIA_IMAGE(m_media));
-    }
-
-    return 0;
+    return grl_media_get_orientation(m_media);
 }
 
 int GriloMedia::width() const
 {
-    if (GRL_IS_MEDIA_IMAGE(m_media)) {
-        return grl_media_image_get_width(GRL_MEDIA_IMAGE(m_media));
-    }
-
-    return 0;
+    return grl_media_get_width(m_media);
 }
 
 QVariant GriloMedia::convertValue(const GValue *value) const

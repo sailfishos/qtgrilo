@@ -1,9 +1,8 @@
 Name:       grilo-qt5
 
 Summary:    Framework for discovering and browsing media, Qt bindings
-Version:    0.1.13
-Release:    2
-Group:      Development/Libraries
+Version:    0.3.0
+Release:    1
 License:    BSD
 URL:        https://git.merproject.org/mer-core/qtgrilo
 Source0:    %{name}-%{version}.tar.bz2
@@ -11,14 +10,13 @@ Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
-BuildRequires:  pkgconfig(grilo-0.2)
+BuildRequires:  pkgconfig(grilo-0.3)
 
 %description
 %{summary}.
 
 %package devel
 Summary:    Development files for %{name}
-Group:      Development/Libraries
 Requires:   %{name} = %{version}-%{release}
 
 %description devel
@@ -26,10 +24,7 @@ Development files for %{name}.
 
 %package qml-plugin
 Summary:    QML plugin for %{name}
-Group:      Development/Libraries
 Requires:   %{name} = %{version}-%{release}
-Provides:   nemo-qml-plugin-grilo-qt5 > 0.1.6
-Obsoletes:  nemo-qml-plugin-grilo-qt5 <= 0.1.6
 
 %description qml-plugin
 QML plugin for %{name}.
