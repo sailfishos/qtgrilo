@@ -277,7 +277,7 @@ GrlOperationOptions *GriloDataSource::operationOptions(GrlSource *src, const Ope
 
     GrlOperationOptions *options = grl_operation_options_new(caps);
 
-    grl_operation_options_set_flags(options, GRL_RESOLVE_IDLE_RELAY); // TODO: hardcoded
+    grl_operation_options_set_resolution_flags(options, GRL_RESOLVE_IDLE_RELAY); // TODO: hardcoded
     grl_operation_options_set_skip(options, m_skip);
 
     if (m_count != 0) {
