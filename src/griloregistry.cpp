@@ -60,7 +60,7 @@ QStringList GriloRegistry::availableSources()
 bool GriloRegistry::loadAll()
 {
     // TODO: error reporting
-    return grl_registry_load_all_plugins(m_registry, NULL) == TRUE;
+    return grl_registry_load_all_plugins(m_registry, TRUE, NULL) == TRUE;
 }
 
 bool GriloRegistry::loadPluginById(const QString &pluginId)
@@ -78,7 +78,8 @@ bool GriloRegistry::loadPluginById(const QString &pluginId)
     }
 
     // TODO: error reporting
-    return grl_registry_load_plugin_by_id(m_registry, id.constData(), NULL) == TRUE;
+    grl_registry_load_all_plugins(m_registry, FALSE, NULL);
+    return grl_registry_activate_plugin_by_id(m_registry, id.constData(), NULL) == TRUE;
 }
 
 QString GriloRegistry::configurationFile() const

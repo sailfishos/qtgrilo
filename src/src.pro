@@ -3,7 +3,7 @@ CONFIG += qt link_pkgconfig no_keywords
 
 QT = core
 
-PKGCONFIG = grilo-0.2
+PKGCONFIG = grilo-0.3
 TARGET = grilo-qt5
 
 unix:system(cp pre-grilo-qt.prf.in $${TARGET}.prf.in)
@@ -63,7 +63,7 @@ prf.files = $${TARGET}.prf
 prf.path = $$[QMAKE_MKSPECS]/features
 INSTALLS += target headers prf
 
-QMAKE_PKGCONFIG_REQUIRES = grilo-0.2
+QMAKE_PKGCONFIG_REQUIRES = grilo-0.3
 QMAKE_PKGCONFIG_LIBDIR = $$target.path
 QMAKE_PKGCONFIG_INCDIR = $$headers.path
 QMAKE_PKGCONFIG_DESTDIR = pkgconfig
