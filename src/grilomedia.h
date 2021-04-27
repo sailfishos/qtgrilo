@@ -39,7 +39,7 @@ class GRILO_QT_EXPORT GriloMedia : public QObject
     Q_PROPERTY(QString id READ id CONSTANT)
     Q_PROPERTY(QString title READ title CONSTANT)
     Q_PROPERTY(QUrl url READ url CONSTANT)
-    Q_PROPERTY(bool container READ isContainer CONSTANT)
+    Q_PROPERTY(int mediaType READ mediaType CONSTANT)
     Q_PROPERTY(int duration READ duration CONSTANT)
     Q_PROPERTY(QString author READ author CONSTANT)
     Q_PROPERTY(QString album READ album CONSTANT)
@@ -71,7 +71,7 @@ public:
     QString id() const;
     QString title() const;
     QUrl url() const;
-    bool isContainer() const;
+    int mediaType() const;
     int duration() const;
     QString author() const;
     QString album() const;
