@@ -100,14 +100,14 @@ QUrl GriloMedia::url() const
     return url;
 }
 
+int GriloMedia::mediaType() const
+{
+    return static_cast<int>(grl_media_get_media_type(m_media));
+}
+
 int GriloMedia::duration() const
 {
     return grl_media_get_duration(m_media);
-}
-
-bool GriloMedia::isContainer() const
-{
-    return grl_media_is_container(m_media) == TRUE;
 }
 
 QString GriloMedia::author() const
