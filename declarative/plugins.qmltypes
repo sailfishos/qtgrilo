@@ -108,10 +108,20 @@ Module {
         exports: ["org.nemomobile.grilo/GriloMedia 0.0"]
         isCreatable: false
         exportMetaObjectRevisions: [0]
+        Enum {
+            name: "MediaType"
+            values: {
+                "TypeUnknown": 0,
+                "TypeAudio": 1,
+                "TypeVideo": 2,
+                "TypeImage": 3,
+                "TypeContainer": 4
+            }
+        }
         Property { name: "id"; type: "string"; isReadonly: true }
         Property { name: "title"; type: "string"; isReadonly: true }
         Property { name: "url"; type: "QUrl"; isReadonly: true }
-        Property { name: "container"; type: "bool"; isReadonly: true }
+        Property { name: "mediaType"; type: "int"; isReadonly: true }
         Property { name: "duration"; type: "int"; isReadonly: true }
         Property { name: "author"; type: "string"; isReadonly: true }
         Property { name: "album"; type: "string"; isReadonly: true }
