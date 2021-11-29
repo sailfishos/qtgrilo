@@ -1,10 +1,10 @@
 Name:       grilo-qt5
 
 Summary:    Framework for discovering and browsing media, Qt bindings
-Version:    0.3.0
+Version:    0.3.3
 Release:    1
-License:    BSD
-URL:        https://git.merproject.org/mer-core/qtgrilo
+License:    LGPLv2+
+URL:        https://github.com/sailfishos/qtgrilo
 Source0:    %{name}-%{version}.tar.bz2
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
@@ -49,6 +49,7 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
+%license COPYING
 %{_libdir}/lib*.so.*
 
 %files devel
