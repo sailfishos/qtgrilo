@@ -61,6 +61,7 @@ bool GriloBrowse::refresh()
     GList *keys = keysAsList();
     GrlOperationOptions *options = operationOptions(src, Browse);
 
+    setFetching(true);
     m_opId = grl_source_browse(src, rootMedia(),
                                keys, options, grilo_source_result_cb, this);
 

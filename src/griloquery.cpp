@@ -57,6 +57,7 @@ bool GriloQuery::refresh()
 
     GList *keys = keysAsList();
     GrlOperationOptions *options = operationOptions(src, Search);
+    setFetching(true);
     m_opId = grl_source_query(src, m_query.toUtf8().constData(),
                               keys, options, grilo_source_result_cb, this);
 
