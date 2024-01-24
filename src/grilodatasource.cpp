@@ -40,7 +40,8 @@ GriloDataSource::GriloDataSource(QObject *parent)
       m_count(0),
       m_skip(0),
       m_insertIndex(0),
-      m_updateScheduled(false)
+      m_updateScheduled(false),
+      m_fetching(false)
 {
     m_metadataKeys << Title;
     m_typeFilter << None;
@@ -267,6 +268,19 @@ void GriloDataSource::setTypeFilter(const QVariantList &filter)
     }
 }
 
+bool GriloDataSource::fetching() const
+{
+    return m_fetching;
+}
+
+void GriloDataSource::setFetching(bool fetching)
+{
+    if (fetching != m_fetching) {
+        m_fetching = fetching;
+        Q_EMIT fetchingChanged();
+    }
+}
+
 GrlOperationOptions *GriloDataSource::operationOptions(GrlSource *src, const OperationType &type)
 {
     GrlCaps *caps = NULL;
@@ -378,6 +392,7 @@ void GriloDataSource::grilo_source_result_cb(GrlSource *source, guint op_id,
                 model->endRemoveRows();
             }
         }
+        that->setFetching(false);
         Q_EMIT that->finished();
     }
 }

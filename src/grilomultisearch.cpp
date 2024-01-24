@@ -56,6 +56,7 @@ bool GriloMultiSearch::refresh()
     GList *keys = keysAsList();
     GrlOperationOptions *options = operationOptions(NULL, Search);
 
+    setFetching(true);
     m_opId = grl_multiple_search(sources, m_text.toUtf8().constData(),
                                  keys, options, grilo_source_result_cb, this);
 

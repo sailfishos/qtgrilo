@@ -45,6 +45,7 @@ class GRILO_QT_EXPORT GriloDataSource : public QObject
     Q_PROPERTY(int skip READ skip WRITE setSkip NOTIFY skipChanged)
     Q_PROPERTY(QVariantList metadataKeys READ metadataKeys WRITE setMetadataKeys NOTIFY metadataKeysChanged)
     Q_PROPERTY(QVariantList typeFilter READ typeFilter WRITE setTypeFilter NOTIFY typeFilterChanged)
+    Q_PROPERTY(bool fetching READ fetching NOTIFY fetchingChanged)
 
     Q_ENUMS(MetadataKeys)
     Q_ENUMS(TypeFilter)
@@ -130,6 +131,8 @@ public:
 
     Q_INVOKABLE virtual bool refresh() = 0;
 
+    bool fetching() const;
+
 public Q_SLOTS:
     void cancelRefresh();
     virtual void availableSourcesChanged() = 0;
@@ -142,6 +145,7 @@ Q_SIGNALS:
     void typeFilterChanged();
     void finished();
     void contentUpdated();
+    void fetchingChanged();
 
 protected:
     enum OperationType {
@@ -159,6 +163,8 @@ protected:
     void clearMedia();
 
     void updateContent(GrlSourceChangeType change_type, GPtrArray *changed_media);
+
+    void setFetching(bool active);
 
     GrlOperationOptions *operationOptions(GrlSource *src, const OperationType &type);
     GList *keysAsList();
@@ -187,6 +193,7 @@ private:
     QList<GriloMedia *> m_media;
     QList<GriloModel *> m_models;
     QHash<QString, GriloMedia *> m_hash;
+    bool m_fetching;
 };
 
 #endif /* GRILO_DATA_SOURCE_H */
