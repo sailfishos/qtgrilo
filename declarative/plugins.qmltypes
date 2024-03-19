@@ -96,6 +96,7 @@ Module {
         Property { name: "skip"; type: "int" }
         Property { name: "metadataKeys"; type: "QVariantList" }
         Property { name: "typeFilter"; type: "QVariantList" }
+        Property { name: "fetching"; type: "bool"; isReadonly: true }
         Signal { name: "finished" }
         Signal { name: "contentUpdated" }
         Method { name: "cancelRefresh" }
