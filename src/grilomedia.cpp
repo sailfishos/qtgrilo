@@ -125,6 +125,11 @@ QString GriloMedia::artist() const
     return QString::fromUtf8(grl_media_get_artist(m_media));
 }
 
+QString GriloMedia::albumArtist() const
+{
+    return QString::fromUtf8(grl_media_get_album_artist(m_media));
+}
+
 QString GriloMedia::genre() const
 {
     return QString::fromUtf8(grl_media_get_genre(m_media));
