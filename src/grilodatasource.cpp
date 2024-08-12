@@ -61,7 +61,7 @@ const QList<GriloMedia *> *GriloDataSource::media() const
 void GriloDataSource::addModel(GriloModel *model)
 {
     if (m_models.indexOf(model) == -1) {
-        m_models << model;
+        m_models.append(model);
     }
 }
 
@@ -118,8 +118,14 @@ void GriloDataSource::addMedia(GrlMedia *media)
             return;
         }
     }
-
     wrappedMedia = new GriloMedia(media);
+    QString id = wrappedMedia->id();
+
+    if (!id.isEmpty() && m_hash.contains(id)) {
+        qWarning() << "Duplicate id detected on qtgrilo model source, ignored to keep model sane. Id:" << id;
+        delete wrappedMedia;
+        return;
+    }
 
     Q_FOREACH (GriloModel *model, m_models) {
         model->beginInsertRows(QModelIndex(), m_insertIndex, m_insertIndex);
@@ -128,7 +134,6 @@ void GriloDataSource::addMedia(GrlMedia *media)
     m_media.insert(m_insertIndex, wrappedMedia);
     ++m_insertIndex;
 
-    QString id = wrappedMedia->id();
     if (!id.isEmpty()) {
         m_hash.insert(id, wrappedMedia);
     }
@@ -136,7 +141,6 @@ void GriloDataSource::addMedia(GrlMedia *media)
     Q_FOREACH (GriloModel *model, m_models) {
         model->endInsertRows();
     }
-
 }
 
 void GriloDataSource::removeMedia(GrlMedia *media)
@@ -340,7 +344,6 @@ void GriloDataSource::grilo_source_result_cb(GrlSource *source, guint op_id,
                                              GrlMedia *media, guint remaining,
                                              gpointer user_data, const GError *error)
 {
-
     Q_UNUSED(source)
 
     // We get an error if the operation has been canceled:
