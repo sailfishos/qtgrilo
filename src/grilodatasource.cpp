@@ -54,6 +54,7 @@ public:
     QHash<QString, GriloMedia *> m_hash;
     bool m_fetching;
     bool m_initialFetchDone = false;
+    QString m_previouslyAddedId;
 };
 
 GriloDataSourcePrivate::GriloDataSourcePrivate()
@@ -115,13 +116,13 @@ void GriloDataSource::addMedia(GrlMedia *media)
 {
     GriloMedia *wrappedMedia = 0;
 
-    // on first fetch we should be sure that there's nothing to move yet.
-    // TODO: figure out a way to avoid QList::indexOf() with each row on an update
-    if (!d->m_initialFetchDone && d->m_insertIndex < d->m_media.count()) {
+    if (d->m_insertIndex < d->m_media.count()) {
         wrappedMedia = d->m_hash.value(QString::fromUtf8(grl_media_get_id(media)), 0);
     }
 
-    if (wrappedMedia) {
+    // on first fetch we should be sure that there's nothing to move yet.
+    // TODO: figure out a way to avoid QList::indexOf() with each row on an update
+    if (!d->m_initialFetchDone && wrappedMedia) {
         // If the media was already queried by a previous fetch update its position and refresh
         // the data instead of creating another item.
         bool dataChanged = false;
@@ -146,13 +147,19 @@ void GriloDataSource::addMedia(GrlMedia *media)
                 model->dataChanged(modelIndex, modelIndex);
             }
             ++d->m_insertIndex;
+            d->m_previouslyAddedId = wrappedMedia->id();
             return;
         }
     }
+
     wrappedMedia = new GriloMedia(media);
     QString id = wrappedMedia->id();
 
-    if (!id.isEmpty() && d->m_hash.contains(id)) {
+    // simple detection whether the result has duplicated ids on adjacent rows.
+    // would be nice to ensure that there are no duplicates earlier either
+    // as those can get qtgrilo quite confused / crashing, but maybe keeping
+    // track of all ids so far on an update is too much.
+    if (!id.isEmpty() && id == d->m_previouslyAddedId) {
         qWarning() << "Duplicate id detected on qtgrilo model source, ignored to keep model sane. Id:" << id;
         delete wrappedMedia;
         return;
@@ -172,6 +179,8 @@ void GriloDataSource::addMedia(GrlMedia *media)
     Q_FOREACH (GriloModel *model, d->m_models) {
         model->endInsertRows();
     }
+
+    d->m_previouslyAddedId = id;
 }
 
 void GriloDataSource::removeMedia(GrlMedia *media)
@@ -363,6 +372,7 @@ void GriloDataSource::cancelRefresh()
 {
     if (d->m_opId != 0) {
         grl_operation_cancel(d->m_opId);
+        d->m_previouslyAddedId.clear();
         d->m_opId = 0;
     }
 
@@ -376,6 +386,7 @@ void GriloDataSource::grilo_source_result_cb(GrlSource *source, guint op_id,
                                              gpointer user_data, const GError *error)
 {
     Q_UNUSED(source)
+    GriloDataSource *that = static_cast<GriloDataSource *>(user_data);
 
     // We get an error if the operation has been canceled:
     if (error) {
@@ -384,11 +395,10 @@ void GriloDataSource::grilo_source_result_cb(GrlSource *source, guint op_id,
             qCritical() << "Operation failed" << error->message;
         } else {
             // Cancelled operation notification. Nothing else to be done.
+            that->d->m_previouslyAddedId.clear();
             return;
         }
     }
-
-    GriloDataSource *that = static_cast<GriloDataSource *>(user_data);
 
     if (that->d->m_opId != op_id) {
         qWarning() << "Got Op Id result" << op_id
@@ -428,6 +438,7 @@ void GriloDataSource::grilo_source_result_cb(GrlSource *source, guint op_id,
             }
         }
         that->setFetching(false);
+        that->d->m_previouslyAddedId.clear();
         Q_EMIT that->finished();
     }
 }
