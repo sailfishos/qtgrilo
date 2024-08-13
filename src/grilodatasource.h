@@ -174,20 +174,19 @@ protected:
     void timerEvent(QTimerEvent *event);
 
     guint m_opId;
-
     GriloRegistry *m_registry;
-
-    int m_count;
-    int m_skip;
-    int m_insertIndex;
-    QVariantList m_metadataKeys;
-    QVariantList m_typeFilter;
 
 protected Q_SLOTS:
     virtual void contentChanged(const QString &source, GrlSourceChangeType change_type,
                                 GPtrArray *changed_media);
 
 private:
+    int m_count;
+    int m_skip;
+    int m_insertIndex;
+    QVariantList m_metadataKeys;
+    QVariantList m_typeFilter;
+
     bool m_updateScheduled;
     QBasicTimer m_updateTimer;
     QList<GriloMedia *> m_media;
