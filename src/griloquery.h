@@ -27,6 +27,8 @@
 #include <GriloQt>
 #include <GriloDataSource>
 
+class GriloQueryPrivate;
+
 class GRILO_QT_EXPORT GriloQuery : public GriloDataSource
 {
     Q_OBJECT
@@ -66,12 +68,7 @@ private:
                         GPtrArray *changed_media);
     void availableSourcesChanged();
 
-    QString m_source;
-    QString m_query;
-
-    QVariantList m_slowKeys;
-    QVariantList m_supportedKeys;
-    bool m_available;
+    GriloQueryPrivate *d;
 };
 
 #endif /* GRILO_QUERY_H */

@@ -33,6 +33,8 @@
 #include <QObject>
 #include <QStringList>
 
+class GriloRegistryPrivate;
+
 class GRILO_QT_EXPORT GriloRegistry : public QObject
 {
     Q_OBJECT
@@ -70,10 +72,7 @@ private:
                                          gpointer data);
 
     void loadConfigurationFile();
-
-    GrlRegistry *m_registry;
-    QStringList m_sources;
-    QString m_configurationFile;
+    GriloRegistryPrivate *d;
 };
 
 #endif /* GRILO_REGISTRY_H */

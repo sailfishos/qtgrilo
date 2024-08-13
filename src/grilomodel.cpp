@@ -27,10 +27,19 @@
 
 #include <QDebug>
 
-GriloModel::GriloModel(QObject *parent)
-    : QAbstractListModel(parent),
-      m_source(0)
+class GriloModelPrivate
 {
+public:
+    GriloDataSource *m_source;
+
+    mutable QHash<int, QByteArray> m_roleNames;
+};
+
+GriloModel::GriloModel(QObject *parent)
+    : QAbstractListModel(parent)
+    , d(new GriloModelPrivate)
+{
+    d->m_source = nullptr;
     QObject::connect(this, SIGNAL(rowsInserted(const QModelIndex &, int, int)),
                      this, SIGNAL(countChanged()));
     QObject::connect(this, SIGNAL(rowsRemoved(const QModelIndex &, int, int)),
@@ -40,12 +49,13 @@ GriloModel::GriloModel(QObject *parent)
 GriloModel::~GriloModel()
 {
     setSource(0);
+    delete d;
 }
 
 int GriloModel::rowCount(const QModelIndex &parent) const
 {
     if (!parent.isValid()) {
-        return m_source ? m_source->media()->count() : 0;
+        return d->m_source ? d->m_source->media()->count() : 0;
     }
 
     return 0;
@@ -59,11 +69,11 @@ QVariant GriloModel::data(const QModelIndex &index, int role) const
 
     switch (role) {
     case MediaRole:
-        return QVariant::fromValue(m_source->media()->at(index.row()));
+        return QVariant::fromValue(d->m_source->media()->at(index.row()));
     default: {
         QList<QByteArray> keys = roleNames().values(role);
         if (keys.length() > 0) {
-            return m_source->media()->at(index.row())->get(role - MediaRole);
+            return d->m_source->media()->at(index.row())->get(role - MediaRole);
         }
     }
     }
@@ -73,33 +83,33 @@ QVariant GriloModel::data(const QModelIndex &index, int role) const
 
 GriloDataSource *GriloModel::source() const
 {
-    return m_source;
+    return d->m_source;
 }
 
 void GriloModel::setSource(GriloDataSource *source)
 {
-    if (m_source == source) {
+    if (d->m_source == source) {
         return;
     }
 
     beginResetModel();
 
-    if (m_source) {
-        m_source->removeModel(this);
+    if (d->m_source) {
+        d->m_source->removeModel(this);
     }
 
-    m_source = source;
+    d->m_source = source;
 
-    if (m_source) {
-        m_source->addModel(this);
+    if (d->m_source) {
+        d->m_source->addModel(this);
     }
 
     endResetModel();
 
     Q_EMIT sourceChanged();
 
-    if (m_source) {
-        m_source->prefill(this);
+    if (d->m_source) {
+        d->m_source->prefill(this);
     }
 }
 
@@ -110,14 +120,14 @@ int GriloModel::count() const
 
 QHash<int, QByteArray> GriloModel::roleNames() const
 {
-    if (m_roleNames.isEmpty())
+    if (d->m_roleNames.isEmpty())
         grl_init(0, 0);
 
-    m_roleNames[MediaRole] = "media";
+    d->m_roleNames[MediaRole] = "media";
     int cursor = GRL_METADATA_KEY_INVALID;
     const char *metadataKey;
     while ((metadataKey = GRL_METADATA_KEY_GET_NAME(++cursor))) {
-        m_roleNames[MediaRole + cursor] = metadataKey;
+        d->m_roleNames[MediaRole + cursor] = metadataKey;
 
         QStringList splitKey = QString(metadataKey).split("-", QString::SkipEmptyParts);
         if (splitKey.length() > 1) {
@@ -128,9 +138,9 @@ QHash<int, QByteArray> GriloModel::roleNames() const
                 camelCaseKey += camelCase.toUtf8();
             }
 
-            m_roleNames.insertMulti(MediaRole + cursor, camelCaseKey);
+            d->m_roleNames.insertMulti(MediaRole + cursor, camelCaseKey);
         }
     }
 
-    return m_roleNames;
+    return d->m_roleNames;
 }

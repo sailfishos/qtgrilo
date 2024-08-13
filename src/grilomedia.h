@@ -32,6 +32,8 @@
 #include <QVariant>
 #include <QDateTime>
 
+class GriloMediaPrivate;
+
 class GRILO_QT_EXPORT GriloMedia : public QObject
 {
     Q_OBJECT
@@ -98,7 +100,7 @@ public:
 private:
     QVariant convertValue(const GValue *value) const;
 
-    GrlMedia *m_media;
+    GriloMediaPrivate *d;
 };
 
 #endif /* GRILO_MEDIA_H */

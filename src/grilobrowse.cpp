@@ -25,16 +25,35 @@
 
 #include <QDebug>
 
+class GriloBrowsePrivate {
+public:
+    GriloBrowsePrivate();
+
+    QString m_source;
+
+    GriloMedia *m_media;
+    QString m_baseMedia;
+    QVariantList m_slowKeys;
+    QVariantList m_supportedKeys;
+    bool m_available;
+};
+
+GriloBrowsePrivate::GriloBrowsePrivate()
+    : m_media(nullptr)
+    , m_available(false)
+{
+}
+
 GriloBrowse::GriloBrowse(QObject *parent)
-    : GriloDataSource(parent),
-      m_media(0),
-      m_available(false)
+    : GriloDataSource(parent)
+    , d(new GriloBrowsePrivate)
 {
 }
 
 GriloBrowse::~GriloBrowse()
 {
     setBaseMedia(QString());
+    delete d;
 }
 
 bool GriloBrowse::refresh()
@@ -48,15 +67,15 @@ bool GriloBrowse::refresh()
         return false;
     }
 
-    if (m_source.isEmpty()) {
+    if (d->m_source.isEmpty()) {
         qWarning() << "source id not set";
         return false;
     }
 
-    GrlSource *src = registry->lookupSource(m_source);
+    GrlSource *src = registry->lookupSource(d->m_source);
 
     if (!src) {
-        qWarning() << "Failed to get source" << m_source;
+        qWarning() << "Failed to get source" << d->m_source;
         return false;
     }
 
@@ -76,13 +95,13 @@ bool GriloBrowse::refresh()
 
 QString GriloBrowse::source() const
 {
-    return m_source;
+    return d->m_source;
 }
 
 void GriloBrowse::setSource(const QString &source)
 {
-    if (m_source != source) {
-        m_source = source;
+    if (d->m_source != source) {
+        d->m_source = source;
         Q_EMIT sourceChanged();
         Q_EMIT slowKeysChanged();
         Q_EMIT supportedKeysChanged();
@@ -91,18 +110,18 @@ void GriloBrowse::setSource(const QString &source)
 
 QString GriloBrowse::baseMedia() const
 {
-    return m_baseMedia;
+    return d->m_baseMedia;
 }
 
 void GriloBrowse::setBaseMedia(const QString &media)
 {
-    if (m_baseMedia == media) {
+    if (d->m_baseMedia == media) {
         return;
     }
 
-    delete m_media;
-    m_media = nullptr;
-    m_baseMedia = media;
+    delete d->m_media;
+    d->m_media = nullptr;
+    d->m_baseMedia = media;
 
     Q_EMIT baseMediaChanged();
 }
@@ -111,11 +130,11 @@ QVariantList GriloBrowse::supportedKeys() const
 {
     GriloRegistry *registry = getGriloRegistry();
 
-    if (m_source.isEmpty() || !registry) {
+    if (d->m_source.isEmpty() || !registry) {
         return QVariantList();
     }
 
-    GrlSource *src = registry->lookupSource(m_source);
+    GrlSource *src = registry->lookupSource(d->m_source);
     if (src) {
         return listToVariantList(grl_source_supported_keys(src));
     }
@@ -127,11 +146,11 @@ QVariantList GriloBrowse::slowKeys() const
 {
     GriloRegistry *registry = getGriloRegistry();
 
-    if (m_source.isEmpty() || !registry) {
+    if (d->m_source.isEmpty() || !registry) {
         return QVariantList();
     }
 
-    GrlSource *src = registry->lookupSource(m_source);
+    GrlSource *src = registry->lookupSource(d->m_source);
     if (src) {
         return listToVariantList(grl_source_slow_keys(src));
     }
@@ -143,21 +162,21 @@ bool GriloBrowse::isAvailable() const
 {
     GriloRegistry *registry = getGriloRegistry();
 
-    return registry && !m_source.isEmpty()
-            && registry->availableSources().indexOf(m_source) != -1;
+    return registry && !d->m_source.isEmpty()
+            && registry->availableSources().indexOf(d->m_source) != -1;
 }
 
 void GriloBrowse::availableSourcesChanged()
 {
     bool available = isAvailable();
 
-    if (m_available != available) {
-        m_available = available;
+    if (d->m_available != available) {
+        d->m_available = available;
 
         Q_EMIT availabilityChanged();
     }
 
-    if (!m_available && getOpId()) {
+    if (!d->m_available && getOpId()) {
         // A source has disappeared while an operation is already running.
         // Most grilo will crash soon but we will just reset the opId
         setOpId(0);
@@ -166,18 +185,18 @@ void GriloBrowse::availableSourcesChanged()
 
 GrlMedia *GriloBrowse::rootMedia()
 {
-    if (m_media) {
-        return m_media->media();
-    } else if (m_baseMedia.isEmpty()) {
+    if (d->m_media) {
+        return d->m_media->media();
+    } else if (d->m_baseMedia.isEmpty()) {
         return NULL;
     }
 
-    GrlMedia *m = grl_media_unserialize(m_baseMedia.toUtf8().constData());
+    GrlMedia *m = grl_media_unserialize(d->m_baseMedia.toUtf8().constData());
     if (m) {
-        m_media = new GriloMedia(m);
-        return m_media->media();
+        d->m_media = new GriloMedia(m);
+        return d->m_media->media();
     } else {
-        qDebug() << "Failed to create GrlMedia from" << m_baseMedia;
+        qDebug() << "Failed to create GrlMedia from" << d->m_baseMedia;
     }
 
     return NULL;

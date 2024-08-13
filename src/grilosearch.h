@@ -27,10 +27,11 @@
 #include <GriloQt>
 #include <GriloDataSource>
 
+class GriloSearchPrivate;
+
 class GRILO_QT_EXPORT GriloSearch : public GriloDataSource
 {
     Q_OBJECT
-
     Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
     Q_PROPERTY(QVariantList supportedKeys READ supportedKeys NOTIFY supportedKeysChanged)
@@ -64,12 +65,7 @@ Q_SIGNALS:
 private:
     void availableSourcesChanged();
 
-    QString m_source;
-    QString m_text;
-
-    QVariantList m_slowKeys;
-    QVariantList m_supportedKeys;
-    bool m_available;
+    GriloSearchPrivate *d;
 };
 
 #endif /* GRILO_SEARCH_H */

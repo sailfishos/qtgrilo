@@ -23,27 +23,36 @@
 
 #include <QDebug>
 
-GriloMedia::GriloMedia(GrlMedia *media, QObject *parent)
-    : QObject(parent), m_media(media)
+class GriloMediaPrivate
 {
+public:
+    GrlMedia *m_media;
+};
+
+GriloMedia::GriloMedia(GrlMedia *media, QObject *parent)
+    : QObject(parent)
+    , d(new GriloMediaPrivate)
+{
+    d->m_media = media;
 }
 
 GriloMedia::~GriloMedia()
 {
-    g_object_unref(m_media);
-    m_media = 0;
+    g_object_unref(d->m_media);
+    d->m_media = 0;
+    delete d;
 }
 
 GrlMedia *GriloMedia::media()
 {
-    return m_media;
+    return d->m_media;
 }
 
 void GriloMedia::setMedia(GrlMedia *media)
 {
-    if (m_media != media) {
-        g_object_unref(m_media);
-        m_media = media;
+    if (d->m_media != media) {
+        g_object_unref(d->m_media);
+        d->m_media = media;
     }
 }
 
@@ -65,7 +74,7 @@ QVariant GriloMedia::get(const QString &keyId) const
 
 QVariant GriloMedia::get(const quint32 keyId) const
 {
-    const GValue *gValue = grl_data_get(GRL_DATA(m_media), keyId);
+    const GValue *gValue = grl_data_get(GRL_DATA(d->m_media), keyId);
 
     return convertValue(gValue);
 }
@@ -73,7 +82,7 @@ QVariant GriloMedia::get(const quint32 keyId) const
 QString GriloMedia::serialize()
 {
     QString result;
-    gchar *str = grl_media_serialize_extended(m_media, GRL_MEDIA_SERIALIZE_FULL, NULL);
+    gchar *str = grl_media_serialize_extended(d->m_media, GRL_MEDIA_SERIALIZE_FULL, NULL);
 
     if (str) {
         result = QString::fromUtf8(str);
@@ -85,84 +94,84 @@ QString GriloMedia::serialize()
 
 QString GriloMedia::id() const
 {
-    return QString::fromUtf8(grl_media_get_id(m_media));
+    return QString::fromUtf8(grl_media_get_id(d->m_media));
 }
 
 QString GriloMedia::title() const
 {
-    return QString::fromUtf8(grl_media_get_title(m_media));
+    return QString::fromUtf8(grl_media_get_title(d->m_media));
 }
 
 QUrl GriloMedia::url() const
 {
-    QUrl url = QUrl::fromEncoded(QByteArray(grl_media_get_url(m_media)));
+    QUrl url = QUrl::fromEncoded(QByteArray(grl_media_get_url(d->m_media)));
 
     return url;
 }
 
 int GriloMedia::mediaType() const
 {
-    return static_cast<int>(grl_media_get_media_type(m_media));
+    return static_cast<int>(grl_media_get_media_type(d->m_media));
 }
 
 int GriloMedia::duration() const
 {
-    return grl_media_get_duration(m_media);
+    return grl_media_get_duration(d->m_media);
 }
 
 QString GriloMedia::author() const
 {
-    return QString::fromUtf8(grl_media_get_author(m_media));
+    return QString::fromUtf8(grl_media_get_author(d->m_media));
 }
 
 QString GriloMedia::album() const
 {
-    return QString::fromUtf8(grl_media_get_album(m_media));
+    return QString::fromUtf8(grl_media_get_album(d->m_media));
 }
 
 QString GriloMedia::artist() const
 {
-    return QString::fromUtf8(grl_media_get_artist(m_media));
+    return QString::fromUtf8(grl_media_get_artist(d->m_media));
 }
 
 QString GriloMedia::albumArtist() const
 {
-    return QString::fromUtf8(grl_media_get_album_artist(m_media));
+    return QString::fromUtf8(grl_media_get_album_artist(d->m_media));
 }
 
 QString GriloMedia::genre() const
 {
-    return QString::fromUtf8(grl_media_get_genre(m_media));
+    return QString::fromUtf8(grl_media_get_genre(d->m_media));
 }
 
 QUrl GriloMedia::thumbnail() const
 {
-    return QUrl(grl_media_get_thumbnail(m_media));
+    return QUrl(grl_media_get_thumbnail(d->m_media));
 }
 
 int GriloMedia::year() const
 {
-    return g_date_time_get_year(grl_media_get_creation_date(m_media));
+    return g_date_time_get_year(grl_media_get_creation_date(d->m_media));
  }
 
 int GriloMedia::trackNumber() const
 {
-    return grl_media_get_track_number(m_media);
+    return grl_media_get_track_number(d->m_media);
 }
 
 int GriloMedia::childCount() const
 {
-    return grl_media_get_childcount(m_media);
+    return grl_media_get_childcount(d->m_media);
 }
 
 QString GriloMedia::mimeType() const
 {
-    return QString::fromUtf8(grl_media_get_mime(m_media));
+    return QString::fromUtf8(grl_media_get_mime(d->m_media));
 }
 
 QDateTime GriloMedia::modificationDate() const
 {
-    GDateTime *dateTime = grl_media_get_modification_date(m_media);
+    GDateTime *dateTime = grl_media_get_modification_date(d->m_media);
 
     if (dateTime) {
         return QDateTime::fromTime_t(g_date_time_to_unix(dateTime));
@@ -173,17 +182,17 @@ QDateTime GriloMedia::modificationDate() const
 
 int GriloMedia::height() const
 {
-    return grl_media_get_height(m_media);
+    return grl_media_get_height(d->m_media);
 }
 
 int GriloMedia::orientation() const
 {
-    return grl_media_get_orientation(m_media);
+    return grl_media_get_orientation(d->m_media);
 }
 
 int GriloMedia::width() const
 {
-    return grl_media_get_width(m_media);
+    return grl_media_get_width(d->m_media);
 }
 
 QVariant GriloMedia::convertValue(const GValue *value) const

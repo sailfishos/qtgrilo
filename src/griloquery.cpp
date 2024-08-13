@@ -24,14 +24,26 @@
 
 #include <QDebug>
 
+class GriloQueryPrivate
+{
+public:
+    QString m_source;
+    QString m_query;
+
+    QVariantList m_slowKeys;
+    QVariantList m_supportedKeys;
+    bool m_available = false;
+};
+
 GriloQuery::GriloQuery(QObject *parent)
-    : GriloDataSource(parent),
-      m_available(false)
+    : GriloDataSource(parent)
+    , d(new GriloQueryPrivate)
 {
 }
 
 GriloQuery::~GriloQuery()
 {
+    delete d;
 }
 
 bool GriloQuery::refresh()
@@ -44,22 +56,22 @@ bool GriloQuery::refresh()
         return false;
     }
 
-    if (m_source.isEmpty()) {
+    if (d->m_source.isEmpty()) {
         qWarning() << "source id not set";
         return false;
     }
 
-    GrlSource *src = registry->lookupSource(m_source);
+    GrlSource *src = registry->lookupSource(d->m_source);
 
     if (!src) {
-        qWarning() << "Failed to get source" << m_source;
+        qWarning() << "Failed to get source" << d->m_source;
         return false;
     }
 
     GList *keys = keysAsList();
     GrlOperationOptions *options = operationOptions(src, Search);
     setFetching(true);
-    guint opId = grl_source_query(src, m_query.toUtf8().constData(),
+    guint opId = grl_source_query(src, d->m_query.toUtf8().constData(),
                                   keys, options, grilo_source_result_cb, this);
     setOpId(opId);
 
@@ -71,13 +83,13 @@ bool GriloQuery::refresh()
 
 QString GriloQuery::source() const
 {
-    return m_source;
+    return d->m_source;
 }
 
 void GriloQuery::setSource(const QString &source)
 {
-    if (m_source != source) {
-        m_source = source;
+    if (d->m_source != source) {
+        d->m_source = source;
         Q_EMIT sourceChanged();
         Q_EMIT slowKeysChanged();
         Q_EMIT supportedKeysChanged();
@@ -86,13 +98,13 @@ void GriloQuery::setSource(const QString &source)
 
 QString GriloQuery::query() const
 {
-    return m_query;
+    return d->m_query;
 }
 
 void GriloQuery::setQuery(const QString &query)
 {
-    if (m_query != query) {
-        m_query = query;
+    if (d->m_query != query) {
+        d->m_query = query;
         Q_EMIT queryChanged();
     }
 }
@@ -101,11 +113,11 @@ QVariantList GriloQuery::supportedKeys() const
 {
     GriloRegistry *registry = getGriloRegistry();
 
-    if (m_source.isEmpty() || !registry) {
+    if (d->m_source.isEmpty() || !registry) {
         return QVariantList();
     }
 
-    GrlSource *src = registry->lookupSource(m_source);
+    GrlSource *src = registry->lookupSource(d->m_source);
     if (src) {
         return listToVariantList(grl_source_supported_keys(src));
     }
@@ -117,11 +129,11 @@ QVariantList GriloQuery::slowKeys() const
 {
     GriloRegistry *registry = getGriloRegistry();
 
-    if (m_source.isEmpty() || !registry) {
+    if (d->m_source.isEmpty() || !registry) {
         return QVariantList();
     }
 
-    GrlSource *src = registry->lookupSource(m_source);
+    GrlSource *src = registry->lookupSource(d->m_source);
     if (src) {
         return listToVariantList(grl_source_slow_keys(src));
     }
@@ -133,21 +145,21 @@ bool GriloQuery::isAvailable() const
 {
     GriloRegistry *registry = getGriloRegistry();
 
-    return registry && !m_source.isEmpty() &&
-           registry->availableSources().indexOf(m_source) != -1;
+    return registry && !d->m_source.isEmpty() &&
+           registry->availableSources().indexOf(d->m_source) != -1;
 }
 
 void GriloQuery::availableSourcesChanged()
 {
     bool available = isAvailable();
 
-    if (m_available != available) {
-        m_available = available;
+    if (d->m_available != available) {
+        d->m_available = available;
 
         Q_EMIT availabilityChanged();
     }
 
-    if (!m_available && getOpId()) {
+    if (!d->m_available && getOpId()) {
         // A source has disappeared while an operation is already running.
         // Not sure how will grilo behave but we will just reset the opId
         setOpId(0);
@@ -157,7 +169,7 @@ void GriloQuery::availableSourcesChanged()
 void GriloQuery::contentChanged(const QString &source, GrlSourceChangeType change_type,
                                 GPtrArray *changed_media)
 {
-    if (source == m_source) {
+    if (source == d->m_source) {
         updateContent(change_type, changed_media);
     }
 }
