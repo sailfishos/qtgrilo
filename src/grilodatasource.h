@@ -173,14 +173,18 @@ protected:
 
     void timerEvent(QTimerEvent *event);
 
-    guint m_opId;
-    GriloRegistry *m_registry;
+    guint getOpId() const;
+    void setOpId(guint id);
+    GriloRegistry *getGriloRegistry() const;
 
 protected Q_SLOTS:
     virtual void contentChanged(const QString &source, GrlSourceChangeType change_type,
                                 GPtrArray *changed_media);
 
 private:
+    guint m_opId;
+    GriloRegistry *m_registry;
+
     int m_count;
     int m_skip;
     int m_insertIndex;

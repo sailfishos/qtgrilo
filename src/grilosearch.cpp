@@ -38,7 +38,8 @@ bool GriloSearch::refresh()
 {
     cancelRefresh();
 
-    if (!m_registry) {
+    GriloRegistry *registry = getGriloRegistry();
+    if (!registry) {
         qWarning() << "GriloRegistry not set";
         return false;
     }
@@ -48,7 +49,7 @@ bool GriloSearch::refresh()
         return false;
     }
 
-    GrlSource *src = m_registry->lookupSource(m_source);
+    GrlSource *src = registry->lookupSource(m_source);
 
     if (!src) {
         qWarning() << "Failed to get source" << m_source;
@@ -58,13 +59,14 @@ bool GriloSearch::refresh()
     GList *keys = keysAsList();
     GrlOperationOptions *options = operationOptions(src, Search);
     setFetching(true);
-    m_opId = grl_source_search(src, m_text.toUtf8().constData(),
-                               keys, options, grilo_source_result_cb, this);
+    guint opId = grl_source_search(src, m_text.toUtf8().constData(),
+                                   keys, options, grilo_source_result_cb, this);
+    setOpId(opId);
 
     g_object_unref(options);
     g_list_free(keys);
 
-    return m_opId != 0;
+    return opId != 0;
 }
 
 QString GriloSearch::source() const
@@ -97,11 +99,13 @@ void GriloSearch::setText(const QString &text)
 
 QVariantList GriloSearch::supportedKeys() const
 {
-    if (m_source.isEmpty() || !m_registry) {
+    GriloRegistry *registry = getGriloRegistry();
+
+    if (m_source.isEmpty() || !registry) {
         return QVariantList();
     }
 
-    GrlSource *src = m_registry->lookupSource(m_source);
+    GrlSource *src = registry->lookupSource(m_source);
     if (src) {
         return listToVariantList(grl_source_supported_keys(src));
     }
@@ -111,11 +115,13 @@ QVariantList GriloSearch::supportedKeys() const
 
 QVariantList GriloSearch::slowKeys() const
 {
-    if (m_source.isEmpty() || !m_registry) {
+    GriloRegistry *registry = getGriloRegistry();
+
+    if (m_source.isEmpty() || !registry) {
         return QVariantList();
     }
 
-    GrlSource *src = m_registry->lookupSource(m_source);
+    GrlSource *src = registry->lookupSource(m_source);
     if (src) {
         return listToVariantList(grl_source_slow_keys(src));
     }
@@ -125,8 +131,10 @@ QVariantList GriloSearch::slowKeys() const
 
 bool GriloSearch::isAvailable() const
 {
-    return m_registry && !m_source.isEmpty() &&
-           m_registry->availableSources().indexOf(m_source) != -1;
+    GriloRegistry *registry = getGriloRegistry();
+
+    return registry && !m_source.isEmpty() &&
+           registry->availableSources().indexOf(m_source) != -1;
 }
 
 void GriloSearch::availableSourcesChanged()
@@ -139,9 +147,9 @@ void GriloSearch::availableSourcesChanged()
         Q_EMIT availabilityChanged();
     }
 
-    if (!m_available && m_opId) {
+    if (!m_available && getOpId()) {
         // A source has disappeared while an operation is already running.
         // Most grilo will crash soon but we will just reset the opId
-        m_opId = 0;
+        setOpId(0);
     }
 }

@@ -446,3 +446,18 @@ void GriloDataSource::timerEvent(QTimerEvent *event)
         Q_EMIT contentUpdated();
     }
 }
+
+guint GriloDataSource::getOpId() const
+{
+    return m_opId;
+}
+
+void GriloDataSource::setOpId(guint id)
+{
+    m_opId = id;
+}
+
+GriloRegistry *GriloDataSource::getGriloRegistry() const
+{
+    return m_registry;
+}

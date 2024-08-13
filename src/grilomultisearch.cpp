@@ -37,7 +37,8 @@ bool GriloMultiSearch::refresh()
 {
     cancelRefresh();
 
-    if (!m_registry) {
+    GriloRegistry *registry = getGriloRegistry();
+    if (!registry) {
         qWarning() << "GriloRegistry not set";
         return false;
     }
@@ -45,7 +46,7 @@ bool GriloMultiSearch::refresh()
     GList *sources = NULL;
 
     Q_FOREACH (const QString &src, m_sources) {
-        GrlSource *elem = m_registry->lookupSource(src);
+        GrlSource *elem = registry->lookupSource(src);
         if (elem) {
             sources = g_list_append(sources, elem);
         } else {
@@ -57,15 +58,16 @@ bool GriloMultiSearch::refresh()
     GrlOperationOptions *options = operationOptions(NULL, Search);
 
     setFetching(true);
-    m_opId = grl_multiple_search(sources, m_text.toUtf8().constData(),
-                                 keys, options, grilo_source_result_cb, this);
+    guint opId = grl_multiple_search(sources, m_text.toUtf8().constData(),
+                                     keys, options, grilo_source_result_cb, this);
 
+    setOpId(opId);
     g_list_free(sources);
 
     g_object_unref(options);
     g_list_free(keys);
 
-    return m_opId != 0;
+    return opId != 0;
 }
 
 QStringList GriloMultiSearch::sources() const
