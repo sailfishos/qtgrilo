@@ -36,6 +36,8 @@ class GriloMedia;
 class GriloModel;
 class GriloRegistry;
 
+class GriloDataSourcePrivate;
+
 class GRILO_QT_EXPORT GriloDataSource : public QObject
 {
     Q_OBJECT
@@ -173,27 +175,16 @@ protected:
 
     void timerEvent(QTimerEvent *event);
 
-    guint m_opId;
-
-    GriloRegistry *m_registry;
-
-    int m_count;
-    int m_skip;
-    int m_insertIndex;
-    QVariantList m_metadataKeys;
-    QVariantList m_typeFilter;
+    guint getOpId() const;
+    void setOpId(guint id);
+    GriloRegistry *getGriloRegistry() const;
 
 protected Q_SLOTS:
     virtual void contentChanged(const QString &source, GrlSourceChangeType change_type,
                                 GPtrArray *changed_media);
 
 private:
-    bool m_updateScheduled;
-    QBasicTimer m_updateTimer;
-    QList<GriloMedia *> m_media;
-    QList<GriloModel *> m_models;
-    QHash<QString, GriloMedia *> m_hash;
-    bool m_fetching;
+    GriloDataSourcePrivate *d;
 };
 
 #endif /* GRILO_DATA_SOURCE_H */

@@ -29,10 +29,11 @@
 
 #include <QStringList>
 
+class GriloMultiSearchPrivate;
+
 class GRILO_QT_EXPORT GriloMultiSearch : public GriloDataSource
 {
     Q_OBJECT
-
     Q_PROPERTY(QStringList sources READ sources WRITE setSources NOTIFY sourcesChanged)
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
 
@@ -53,8 +54,7 @@ Q_SIGNALS:
     void textChanged();
 
 private:
-    QStringList m_sources;
-    QString m_text;
+    GriloMultiSearchPrivate *d;
 };
 
 #endif /* GRILO_MULTI_SEARCH_H */

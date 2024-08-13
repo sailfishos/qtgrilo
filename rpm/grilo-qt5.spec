@@ -1,7 +1,7 @@
 Name:       grilo-qt5
 
 Summary:    Framework for discovering and browsing media, Qt bindings
-Version:    0.3.3
+Version:    0.4.0
 Release:    1
 License:    LGPLv2+
 URL:        https://github.com/sailfishos/qtgrilo
@@ -40,7 +40,6 @@ make %{?_smp_mflags}
 
 
 %install
-rm -rf %{buildroot}
 %qmake5_install
 
 %post -p /sbin/ldconfig
@@ -48,12 +47,10 @@ rm -rf %{buildroot}
 %postun -p /sbin/ldconfig
 
 %files
-%defattr(-,root,root,-)
 %license COPYING
 %{_libdir}/lib*.so.*
 
 %files devel
-%defattr(-,root,root,-)
 %{_datarootdir}/qt5/mkspecs/features/%{name}.prf
 %{_includedir}/qt5/GriloQt/GriloBrowse
 %{_includedir}/qt5/GriloQt/GriloDataSource
@@ -76,7 +73,6 @@ rm -rf %{buildroot}
 %{_libdir}/pkgconfig/%{name}.pc
 
 %files qml-plugin
-%defattr(-,root,root,-)
 %{_libdir}/qt5/qml/org/nemomobile/grilo/libgrilo-qt5-qml-plugin.so
 %{_libdir}/qt5/qml/org/nemomobile/grilo/plugins.qmltypes
 %{_libdir}/qt5/qml/org/nemomobile/grilo/qmldir

@@ -24,28 +24,38 @@
 
 #include <QDebug>
 
+class GriloMultiSearchPrivate
+{
+public:
+    QStringList m_sources;
+    QString m_text;
+};
+
 GriloMultiSearch::GriloMultiSearch(QObject *parent)
     : GriloDataSource(parent)
+    , d(new GriloMultiSearchPrivate)
 {
 }
 
 GriloMultiSearch::~GriloMultiSearch()
 {
+    delete d;
 }
 
 bool GriloMultiSearch::refresh()
 {
     cancelRefresh();
 
-    if (!m_registry) {
+    GriloRegistry *registry = getGriloRegistry();
+    if (!registry) {
         qWarning() << "GriloRegistry not set";
         return false;
     }
 
     GList *sources = NULL;
 
-    Q_FOREACH (const QString &src, m_sources) {
-        GrlSource *elem = m_registry->lookupSource(src);
+    Q_FOREACH (const QString &src, d->m_sources) {
+        GrlSource *elem = registry->lookupSource(src);
         if (elem) {
             sources = g_list_append(sources, elem);
         } else {
@@ -57,39 +67,40 @@ bool GriloMultiSearch::refresh()
     GrlOperationOptions *options = operationOptions(NULL, Search);
 
     setFetching(true);
-    m_opId = grl_multiple_search(sources, m_text.toUtf8().constData(),
-                                 keys, options, grilo_source_result_cb, this);
+    guint opId = grl_multiple_search(sources, d->m_text.toUtf8().constData(),
+                                     keys, options, grilo_source_result_cb, this);
 
+    setOpId(opId);
     g_list_free(sources);
 
     g_object_unref(options);
     g_list_free(keys);
 
-    return m_opId != 0;
+    return opId != 0;
 }
 
 QStringList GriloMultiSearch::sources() const
 {
-    return m_sources;
+    return d->m_sources;
 }
 
 void GriloMultiSearch::setSources(const QStringList &sources)
 {
-    if (m_sources != sources) {
-        m_sources = sources;
+    if (d->m_sources != sources) {
+        d->m_sources = sources;
         Q_EMIT sourcesChanged();
     }
 }
 
 QString GriloMultiSearch::text() const
 {
-    return m_text;
+    return d->m_text;
 }
 
 void GriloMultiSearch::setText(const QString &text)
 {
-    if (m_text != text) {
-        m_text = text;
+    if (d->m_text != text) {
+        d->m_text = text;
         Q_EMIT textChanged();
     }
 }

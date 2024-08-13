@@ -32,11 +32,11 @@
 
 class GriloMedia;
 class GriloDataSource;
+class GriloModelPrivate;
 
 class GRILO_QT_EXPORT GriloModel : public QAbstractListModel
 {
     Q_OBJECT
-
     Q_PROPERTY(GriloDataSource *source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(int count READ count NOTIFY countChanged)
 
@@ -65,9 +65,7 @@ Q_SIGNALS:
     void countChanged();
 
 private:
-    GriloDataSource *m_source;
-
-    mutable QHash<int, QByteArray> m_roleNames;
+    GriloModelPrivate *d;
 };
 
 #endif /* GRILO_MODEL_H */

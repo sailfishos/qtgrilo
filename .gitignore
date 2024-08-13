@@ -1,3 +1,5 @@
 Makefile
 moc_*
 *.o
+*.so
+*.so.*

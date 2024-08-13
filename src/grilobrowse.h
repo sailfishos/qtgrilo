@@ -28,6 +28,7 @@
 #include <GriloDataSource>
 
 class GriloMedia;
+class GriloBrowsePrivate;
 
 class GRILO_QT_EXPORT GriloBrowse : public GriloDataSource
 {
@@ -65,16 +66,9 @@ Q_SIGNALS:
 
 private:
     void availableSourcesChanged();
-
     GrlMedia *rootMedia();
 
-    QString m_source;
-
-    GriloMedia *m_media;
-    QString m_baseMedia;
-    QVariantList m_slowKeys;
-    QVariantList m_supportedKeys;
-    bool m_available;
+    GriloBrowsePrivate *d;
 };
 
 #endif /* GRILO_BROWSE_H */

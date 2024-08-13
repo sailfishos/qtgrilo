@@ -32,6 +32,8 @@
 #include <QVariant>
 #include <QDateTime>
 
+class GriloMediaPrivate;
+
 class GRILO_QT_EXPORT GriloMedia : public QObject
 {
     Q_OBJECT
@@ -44,6 +46,7 @@ class GRILO_QT_EXPORT GriloMedia : public QObject
     Q_PROPERTY(QString author READ author CONSTANT)
     Q_PROPERTY(QString album READ album CONSTANT)
     Q_PROPERTY(QString artist READ artist CONSTANT)
+    Q_PROPERTY(QString albumArtist READ albumArtist CONSTANT)
     Q_PROPERTY(QString genre READ genre CONSTANT)
     Q_PROPERTY(QUrl thumbnail READ thumbnail CONSTANT)
     Q_PROPERTY(int year READ year CONSTANT)
@@ -54,7 +57,6 @@ class GRILO_QT_EXPORT GriloMedia : public QObject
     Q_PROPERTY(int height READ height CONSTANT)
     Q_PROPERTY(int orientation READ orientation CONSTANT)
     Q_PROPERTY(int width READ width CONSTANT)
-
 
 public:
     enum MediaType {
@@ -76,6 +78,7 @@ public:
     QString author() const;
     QString album() const;
     QString artist() const;
+    QString albumArtist() const;
     QString genre() const;
     QUrl thumbnail() const;
     int year() const;
@@ -97,7 +100,7 @@ public:
 private:
     QVariant convertValue(const GValue *value) const;
 
-    GrlMedia *m_media;
+    GriloMediaPrivate *d;
 };
 
 #endif /* GRILO_MEDIA_H */
