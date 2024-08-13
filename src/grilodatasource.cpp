@@ -53,6 +53,7 @@ public:
     QList<GriloModel *> m_models;
     QHash<QString, GriloMedia *> m_hash;
     bool m_fetching;
+    bool m_initialFetchDone = false;
 };
 
 GriloDataSourcePrivate::GriloDataSourcePrivate()
@@ -114,7 +115,9 @@ void GriloDataSource::addMedia(GrlMedia *media)
 {
     GriloMedia *wrappedMedia = 0;
 
-    if (d->m_insertIndex < d->m_media.count()) {
+    // on first fetch we should be sure that there's nothing to move yet.
+    // TODO: figure out a way to avoid QList::indexOf() with each row on an update
+    if (!d->m_initialFetchDone && d->m_insertIndex < d->m_media.count()) {
         wrappedMedia = d->m_hash.value(QString::fromUtf8(grl_media_get_id(media)), 0);
     }
 
@@ -403,6 +406,7 @@ void GriloDataSource::grilo_source_result_cb(GrlSource *source, guint op_id,
     }
 
     if (remaining == 0) {
+        that->d->m_initialFetchDone = true;
         that->d->m_opId = 0;
 
         if (that->d->m_updateScheduled) {
