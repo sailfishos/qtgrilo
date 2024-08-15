@@ -124,14 +124,16 @@ QHash<int, QByteArray> GriloModel::roleNames() const
         grl_init(0, 0);
 
     d->m_roleNames[MediaRole] = "media";
+
     int cursor = GRL_METADATA_KEY_INVALID;
-    const char *metadataKey;
-    while ((metadataKey = GRL_METADATA_KEY_GET_NAME(++cursor))) {
+
+    while (const char *metadataKey = GRL_METADATA_KEY_GET_NAME(++cursor)) {
         d->m_roleNames[MediaRole + cursor] = metadataKey;
 
         QStringList splitKey = QString(metadataKey).split("-", QString::SkipEmptyParts);
         if (splitKey.length() > 1) {
             QByteArray camelCaseKey = splitKey[0].toUtf8();
+
             for (int i = 1; i < splitKey.length(); i++) {
                 QString camelCase = splitKey[i];
                 camelCase[0] = camelCase[0].toUpper();
@@ -143,4 +145,13 @@ QHash<int, QByteArray> GriloModel::roleNames() const
     }
 
     return d->m_roleNames;
+}
+
+GriloMedia* GriloModel::getMediaItem(int index)
+{
+    if (index < 0 || index >= rowCount()) {
+        return nullptr;
+    }
+
+    return d->m_source->media()->at(index);
 }

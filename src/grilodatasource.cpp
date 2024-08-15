@@ -152,7 +152,7 @@ void GriloDataSource::addMedia(GrlMedia *media)
         }
     }
 
-    wrappedMedia = new GriloMedia(media);
+    wrappedMedia = new GriloMedia(media, this);
     QString id = wrappedMedia->id();
 
     // simple detection whether the result has duplicated ids on adjacent rows.

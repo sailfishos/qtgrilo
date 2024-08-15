@@ -60,6 +60,8 @@ public:
 
     int count() const;
 
+    Q_INVOKABLE GriloMedia* getMediaItem(int index);
+
 Q_SIGNALS:
     void sourceChanged();
     void countChanged();

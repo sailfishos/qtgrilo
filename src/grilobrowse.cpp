@@ -188,16 +188,16 @@ GrlMedia *GriloBrowse::rootMedia()
     if (d->m_media) {
         return d->m_media->media();
     } else if (d->m_baseMedia.isEmpty()) {
-        return NULL;
+        return nullptr;
     }
 
-    GrlMedia *m = grl_media_unserialize(d->m_baseMedia.toUtf8().constData());
-    if (m) {
-        d->m_media = new GriloMedia(m);
+    GrlMedia *media = grl_media_unserialize(d->m_baseMedia.toUtf8().constData());
+    if (media) {
+        d->m_media = new GriloMedia(media, this);
         return d->m_media->media();
     } else {
         qDebug() << "Failed to create GrlMedia from" << d->m_baseMedia;
     }
 
-    return NULL;
+    return nullptr;
 }
