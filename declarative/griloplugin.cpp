@@ -40,7 +40,6 @@ GriloPlugin::GriloPlugin(QObject *parent)
 
 GriloPlugin::~GriloPlugin()
 {
-
 }
 
 void GriloPlugin::registerTypes(const char *uri)
