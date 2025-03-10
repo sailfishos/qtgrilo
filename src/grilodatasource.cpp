@@ -388,14 +388,14 @@ void GriloDataSource::grilo_source_result_cb(GrlSource *source, guint op_id,
     Q_UNUSED(source)
     GriloDataSource *that = static_cast<GriloDataSource *>(user_data);
 
-    // We get an error if the operation has been canceled:
+    // We get an error if the operation has been cancelled:
     if (error) {
         if (error->domain != GRL_CORE_ERROR || error->code != GRL_CORE_ERROR_OPERATION_CANCELLED) {
             // TODO: error reporting?
             qCritical() << "Operation failed" << error->message;
-        } else {
-            // Cancelled operation notification. Nothing else to be done.
             that->d->m_previouslyAddedId.clear();
+        } else {
+            // Cancelled operation notification. Nothing else to be done and the instance might be deleted already
             return;
         }
     }
