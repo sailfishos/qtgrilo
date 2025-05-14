@@ -34,7 +34,8 @@ static void fill_key_id(gpointer data, gpointer user_data)
 }
 
 
-class GriloDataSourcePrivate {
+class GriloDataSourcePrivate
+{
 public:
     GriloDataSourcePrivate();
 
@@ -454,6 +455,12 @@ void GriloDataSource::contentChanged(const QString &source, GrlSourceChangeType 
 void GriloDataSource::updateContent(GrlSourceChangeType change_type, GPtrArray *changed_media)
 {
     switch (change_type) {
+    case GRL_CONTENT_REMOVED:
+        for (uint i = 0; i < changed_media->len; ++i) {
+            removeMedia((GrlMedia *)g_ptr_array_index(changed_media, i));
+        }
+        // above not enough if content is query grouping items (e.g. album entries).
+        // fall through
     case GRL_CONTENT_CHANGED:
     case GRL_CONTENT_ADDED:
         if (!d->m_updateScheduled) {
@@ -461,11 +468,6 @@ void GriloDataSource::updateContent(GrlSourceChangeType change_type, GPtrArray *
             if (d->m_opId == 0) {
                 d->m_updateTimer.start(100, this);
             }
-        }
-        break;
-    case GRL_CONTENT_REMOVED:
-        for (uint i = 0; i < changed_media->len; ++i) {
-            removeMedia((GrlMedia *)g_ptr_array_index(changed_media, i));
         }
         break;
     default:
